@@ -1,17 +1,13 @@
-name = "remix-cloudflare-workers"
-type = "javascript"
+name = "coreui"
 
-zone_id = ""
 account_id = ""
-route = ""
+route = "*"
 workers_dev = true
+
+main = "."
 
 [site]
 bucket = "./public"
-entry-point = "."
 
 [build]
 command = "npm run build"
-
-[build.upload]
-format="service-worker"

@@ -1,3 +1,5 @@
+name: Deploy to Cloudflare Workers
+
 on:
   push:
     branches:
@@ -16,6 +18,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
+      - run: npm install
       - run: npm run build
       - name: Publish
         uses: cloudflare/wrangler-action@2.0.0
