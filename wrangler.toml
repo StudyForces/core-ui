@@ -2,7 +2,6 @@ name = "coreui"
 compatibility_date = "2022-06-03"
 type = "javascript"
 
-route = "*"
 workers_dev = true
 
 main = "./build/index.js"
@@ -12,3 +11,7 @@ bucket = "./public"
 
 [build]
 command = "npm run build"
+
+[env.production]
+workers_dev = false
+route = "https://coreui-sf.pkasila.net/*"
