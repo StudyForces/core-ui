@@ -1,10 +1,10 @@
 name = "coreui"
+type = "javascript"
 
-account_id = ""
 route = "*"
 workers_dev = true
 
-main = "."
+main = "./build/index.js"
 
 [site]
 bucket = "./public"
