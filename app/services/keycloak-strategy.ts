@@ -1,6 +1,7 @@
 import type {OAuth2Profile, OAuth2StrategyVerifyParams} from "remix-auth-oauth2";
 import type {StrategyVerifyCallback} from "remix-auth";
 import {OAuth2Strategy} from "remix-auth-oauth2";
+import jwt_decode from "jwt-decode";
 
 export interface KeycloakStrategyOptions {
     domain: string;
@@ -18,6 +19,8 @@ export interface KeycloakProfile extends OAuth2Profile {
         familyName: string;
         givenName: string;
     };
+    roles: string[];
+    expiration: number;
     emails: Array<{ value: string }>;
     _json: {
         sub: string;
@@ -105,6 +108,8 @@ export class KeycloakStrategy<User> extends OAuth2Strategy<User,
 
         let data: KeycloakProfile["_json"] = await response.json();
 
+        const parsedToken = jwt_decode(accessToken) as any;
+
         let profile: KeycloakProfile = {
             provider: "keycloak",
             displayName: data.name,
@@ -113,6 +118,8 @@ export class KeycloakStrategy<User> extends OAuth2Strategy<User,
                 familyName: data.family_name,
                 givenName: data.given_name,
             },
+            expiration: parsedToken.exp,
+            roles: parsedToken.realm_access.roles,
             emails: [{value: data.email}],
             _json: data,
         };

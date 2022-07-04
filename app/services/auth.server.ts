@@ -21,6 +21,8 @@ authenticator.use(
             let user: User = {
                 displayName: profile.displayName,
                 emails: profile.emails,
+                roles: profile.roles,
+                expiration: profile.expiration,
                 id: profile.id,
                 name: {
                     familyName: profile.name.familyName,

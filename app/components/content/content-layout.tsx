@@ -19,7 +19,6 @@ import User from "~/services/user";
 
 export default function ContentLayout({children, user}: { children: ReactNode, user?: User }) {
     const sidebar = useDisclosure();
-    const admin = useDisclosure();
     const color = useColorModeValue("gray.600", "gray.300");
     const {colorMode, toggleColorMode} = useColorMode();
 
@@ -61,6 +60,32 @@ export default function ContentLayout({children, user}: { children: ReactNode, u
             </Flex>
         );
     };
+
+    const EditorNavItems = () => {
+        const editor = useDisclosure();
+
+        if (user === null || user === undefined) {
+            return null;
+        }
+
+        if (!user.roles.includes('editor')) {
+            return null;
+        }
+
+        return <>
+            <NavItem icon={RiAdminFill} onClick={editor.onToggle}>
+                Editor
+                <Icon
+                    as={MdKeyboardArrowRight}
+                    ml="auto"
+                    transform={editor.isOpen && "rotate(90deg)"}
+                />
+            </NavItem>
+            <Collapse in={editor.isOpen}>
+                <NavItem pl="12" py="2" as={RemixLink} to={'/editor/problems'}>Problems</NavItem>
+            </Collapse>
+        </>;
+    }
 
     // @ts-ignore
     const SidebarContent = (props: any) => (
@@ -106,17 +131,7 @@ export default function ContentLayout({children, user}: { children: ReactNode, u
             >
                 <NavItem icon={MdHome} as={RemixLink} to={'/'}>Home</NavItem>
                 <NavItem icon={IoListSharp} as={RemixLink} to={'/problems'}>Problems</NavItem>
-                <NavItem icon={RiAdminFill} onClick={admin.onToggle}>
-                    Admin
-                    <Icon
-                        as={MdKeyboardArrowRight}
-                        ml="auto"
-                        transform={admin.isOpen && "rotate(90deg)"}
-                    />
-                </NavItem>
-                <Collapse in={admin.isOpen}>
-                    <NavItem pl="12" py="2" as={RemixLink} to={'/admin/problems'}>Problems</NavItem>
-                </Collapse>
+                <EditorNavItems></EditorNavItems>
             </Flex>
         </Box>
     );
