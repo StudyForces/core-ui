@@ -21,33 +21,34 @@ import {
     ChevronDownIcon,
     ChevronRightIcon, SunIcon, MoonIcon,
 } from '@chakra-ui/icons';
-import { Link as RemixLink } from "@remix-run/react";
+import {Link as RemixLink} from "@remix-run/react";
+import User from "~/services/user";
+import AuthButtons from '../auth-buttons';
 
-export default function Navbar() {
-    const { colorMode, toggleColorMode } = useColorMode();
-    const { isOpen, onToggle } = useDisclosure();
+export default function Navbar({user}: { user?: User }) {
+    const {colorMode, toggleColorMode} = useColorMode();
+    const {isOpen, onToggle} = useDisclosure();
 
     return (
-        <Box position={'sticky'} top={0}
-             bg={useColorModeValue('white', 'gray.800')}>
+        <Box bg={useColorModeValue('white', 'gray.800')}>
             <Container maxW={'5xl'}>
                 <Flex
                     color={useColorModeValue('gray.600', 'white')}
                     minH={'60px'}
-                    py={{ base: 2 }}
-                    px={{ base: 4 }}
+                    py={{base: 2}}
+                    px={{base: 4}}
                     borderBottom={1}
                     borderStyle={'solid'}
                     borderColor={useColorModeValue('gray.200', 'gray.900')}
                     align={'center'}>
                     <Flex
                         flex={0}
-                        ml={{ base: -2 }}
-                        display={{ base: 'flex', md: 'none' }}>
+                        ml={{base: -2}}
+                        display={{base: 'flex', md: 'none'}}>
                         <IconButton
                             onClick={onToggle}
                             icon={
-                                isOpen ? <CloseIcon w={3} h={3} /> : <HamburgerIcon w={5} h={5} />
+                                isOpen ? <CloseIcon w={3} h={3}/> : <HamburgerIcon w={5} h={5}/>
                             }
                             variant={'ghost'}
                             aria-label={'Toggle Navigation'}
@@ -58,53 +59,33 @@ export default function Navbar() {
                             as={RemixLink}
                             to={'/'}
                             ml={2}
-                            textAlign={useBreakpointValue({ base: 'center', md: 'left' })}
+                            textAlign={useBreakpointValue({base: 'center', md: 'left'})}
                             fontFamily={'heading'}
                             fontWeight={600}
                             color={useColorModeValue('gray.800', 'white')}>
                             StudyForces
                         </Text>
 
-                        <Flex display={{ base: 'none', md: 'flex' }} ml={10}>
-                            <DesktopNav />
+                        <Flex display={{base: 'none', md: 'flex'}} ml={10}>
+                            <DesktopNav/>
                         </Flex>
                     </Flex>
 
                     <Stack
-                        flex={{ base: 1, md: 0 }}
+                        flex={{base: 1, md: 0}}
                         justify={'flex-end'}
                         direction={'row'}
                         spacing={4}>
-                        <Button display={{ base: 'none', md: 'flex' }} onClick={toggleColorMode} variant={'link'}>
-                            {colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
+                        <Button display={{base: 'none', md: 'flex'}} onClick={toggleColorMode} variant={'link'}>
+                            {colorMode === 'light' ? <MoonIcon/> : <SunIcon/>}
                         </Button>
-                        <Button
-                            as={'a'}
-                            fontSize={'sm'}
-                            fontWeight={400}
-                            variant={'link'}
-                            href={'#'}>
-                            Sign In
-                        </Button>
-                        <Button
-                            as={'a'}
-                            display={{ base: 'none', md: 'inline-flex' }}
-                            fontSize={'sm'}
-                            fontWeight={600}
-                            color={'white'}
-                            bg={'brand.400'}
-                            href={'#'}
-                            _hover={{
-                                bg: useColorModeValue('brand.500', 'brand.300'),
-                            }}>
-                            Sign Up
-                        </Button>
+                        <AuthButtons user={user}></AuthButtons>
                     </Stack>
                 </Flex>
             </Container>
 
             <Collapse in={isOpen} animateOpacity>
-                <MobileNav />
+                <MobileNav/>
             </Collapse>
         </Box>
     );
@@ -118,7 +99,7 @@ const DesktopNav = () => {
     return (
         <Stack direction={'row'} spacing={4}>
             {NAV_ITEMS.map((navItem) => {
-                const link: {as?: any, to?: string, href?: string} = navItem.remix ? {
+                const link: { as?: any, to?: string, href?: string } = navItem.remix ? {
                     as: RemixLink,
                     to: navItem.href ?? '#'
                 } : {
@@ -164,8 +145,8 @@ const DesktopNav = () => {
     );
 };
 
-const DesktopSubNav = ({ label, href, subLabel, remix }: NavItem) => {
-    const link: {as?: any, to?: string, href?: string} = remix ? {
+const DesktopSubNav = ({label, href, subLabel, remix}: NavItem) => {
+    const link: { as?: any, to?: string, href?: string } = remix ? {
         as: RemixLink,
         to: href ?? '#'
     } : {
@@ -177,12 +158,12 @@ const DesktopSubNav = ({ label, href, subLabel, remix }: NavItem) => {
             display={'block'}
             p={2}
             rounded={'md'}
-            _hover={{ bg: useColorModeValue('brand.50', 'gray.900') }} {...link}>
+            _hover={{bg: useColorModeValue('brand.50', 'gray.900')}} {...link}>
             <Stack direction={'row'} align={'center'}>
                 <Box>
                     <Text
                         transition={'all .3s ease'}
-                        _groupHover={{ color: 'brand.400' }}
+                        _groupHover={{color: 'brand.400'}}
                         fontWeight={500}>
                         {label}
                     </Text>
@@ -192,11 +173,11 @@ const DesktopSubNav = ({ label, href, subLabel, remix }: NavItem) => {
                     transition={'all .3s ease'}
                     transform={'translateX(-10px)'}
                     opacity={0}
-                    _groupHover={{ opacity: '100%', transform: 'translateX(0)' }}
+                    _groupHover={{opacity: '100%', transform: 'translateX(0)'}}
                     justify={'flex-end'}
                     align={'center'}
                     flex={1}>
-                    <Icon color={'brand.400'} w={5} h={5} as={ChevronRightIcon} />
+                    <Icon color={'brand.400'} w={5} h={5} as={ChevronRightIcon}/>
                 </Flex>
             </Stack>
         </Link>
@@ -208,7 +189,7 @@ const MobileNav = () => {
         <Stack
             bg={useColorModeValue('white', 'gray.800')}
             p={4}
-            display={{ md: 'none' }}>
+            display={{md: 'none'}}>
             {NAV_ITEMS.map((navItem) => (
                 <MobileNavItem key={navItem.label} {...navItem} />
             ))}
@@ -216,10 +197,10 @@ const MobileNav = () => {
     );
 };
 
-const MobileNavItem = ({ label, children, href, remix }: NavItem) => {
-    const { isOpen, onToggle } = useDisclosure();
+const MobileNavItem = ({label, children, href, remix}: NavItem) => {
+    const {isOpen, onToggle} = useDisclosure();
 
-    const link: {as?: any, to?: string, href?: string} = remix ? {
+    const link: { as?: any, to?: string, href?: string } = remix ? {
         as: RemixLink,
         to: href ?? '#'
     } : {
@@ -252,7 +233,7 @@ const MobileNavItem = ({ label, children, href, remix }: NavItem) => {
                 )}
             </Flex>
 
-            <Collapse in={isOpen} animateOpacity style={{ marginTop: '0!important' }}>
+            <Collapse in={isOpen} animateOpacity style={{marginTop: '0!important'}}>
                 <Stack
                     mt={2}
                     pl={4}
@@ -262,7 +243,7 @@ const MobileNavItem = ({ label, children, href, remix }: NavItem) => {
                     align={'start'}>
                     {children &&
                         children.map((child) => {
-                            const link: {as?: any, to?: string, href?: string} = child.remix ? {
+                            const link: { as?: any, to?: string, href?: string } = child.remix ? {
                                 as: RemixLink,
                                 to: child.href ?? '#'
                             } : {
@@ -292,6 +273,8 @@ interface NavItem {
 const NAV_ITEMS: Array<NavItem> = [
     {
         label: 'Problems',
+        href: '/problems',
+        remix: true,
         children: [
             {
                 label: 'Physics',

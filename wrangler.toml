@@ -15,3 +15,9 @@ command = "npm run build"
 [env.production]
 workers_dev = false
 route = "https://coreui-sf.pkasila.net/*"
+
+[env.production.vars]
+CLIENT_ID="core"
+CLIENT_SECRET=""
+KC_CB_BASE="https://coreui-sf.pkasila.net"
+

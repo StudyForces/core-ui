@@ -1,6 +1,5 @@
-import LandingLayout from "~/components/landing/landing-layout";
-import {Box, Flex, chakra, SimpleGrid, Container} from "@chakra-ui/react";
-import {ReactNode} from "react";
+import {Box, Flex, chakra, SimpleGrid} from "@chakra-ui/react";
+import type {ReactNode} from "react";
 import {IoPeopleSharp} from "react-icons/io5";
 
 export default function FeaturesIndex() {
@@ -47,83 +46,74 @@ export default function FeaturesIndex() {
     };
 
     return (
-        <LandingLayout>
-            <Container
-                display={'flex'}
-                maxW={'5xl'}
-                justifyContent="center"
-                alignItems="center"
+        <Box
+            px={8}
+            pt={{base: 8, md: 20}}
+            pb={20}
+            mx="auto"
+            bg="white"
+            _dark={{
+                bg: "gray.800",
+            }}
+        >
+            <Box
+                textAlign={{
+                    lg: "center",
+                }}
             >
-                <Box
-                    px={8}
-                    pt={{base: 8, md: 20}}
-                    pb={20}
-                    mx="auto"
-                    bg="white"
-                    _dark={{
-                        bg: "gray.800",
+                <chakra.p
+                    mt={2}
+                    fontSize={{
+                        base: "3xl",
+                        sm: "4xl",
+                    }}
+                    lineHeight="8"
+                    fontWeight="extrabold"
+                    letterSpacing="tight"
+                    _light={{
+                        color: "gray.900",
                     }}
                 >
-                    <Box
-                        textAlign={{
-                            lg: "center",
-                        }}
-                    >
-                        <chakra.p
-                            mt={2}
-                            fontSize={{
-                                base: "3xl",
-                                sm: "4xl",
-                            }}
-                            lineHeight="8"
-                            fontWeight="extrabold"
-                            letterSpacing="tight"
-                            _light={{
-                                color: "gray.900",
-                            }}
-                        >
-                            Features
-                        </chakra.p>
-                        <chakra.p
-                            mt={4}
-                            maxW="2xl"
-                            fontSize="xl"
-                            mx={{
-                                lg: "auto",
-                            }}
-                            color="gray.500"
-                            _dark={{
-                                color: "gray.400",
-                            }}
-                        >
-                            Get inside of what makes us better.
-                        </chakra.p>
-                    </Box>
-                    <SimpleGrid
-                        columns={{
-                            base: 1,
-                            sm: 2,
-                            md: 3,
-                            lg: 4,
-                        }}
-                        spacingX={{
-                            base: 16,
-                            lg: 24,
-                        }}
-                        spacingY={20}
-                        mt={6}
-                    >
-                        <Feature
-                            color="red"
-                            title="Whoops!"
-                            icon={<IoPeopleSharp />}
-                        >
-                            It needs to be added
-                        </Feature>
-                    </SimpleGrid>
-                </Box>
-            </Container>
-        </LandingLayout>
+                    Features
+                </chakra.p>
+                <chakra.p
+                    mt={4}
+                    maxW="2xl"
+                    fontSize="xl"
+                    mx={{
+                        lg: "auto",
+                    }}
+                    color="gray.500"
+                    _dark={{
+                        color: "gray.400",
+                    }}
+                >
+                    Get inside of what makes us better.
+                </chakra.p>
+            </Box>
+            <SimpleGrid
+                columns={{
+                    base: 1,
+                    sm: 2,
+                    md: 3,
+                    lg: 4,
+                }}
+                spacingX={{
+                    base: 16,
+                    lg: 24,
+                }}
+                spacingY={20}
+                mt={6}
+            >
+                <Feature
+                    color="red"
+                    title="Whoops!"
+                    icon={<IoPeopleSharp />}
+                >
+                    It needs to be added
+                </Feature>
+            </SimpleGrid>
+        </Box>
     );
 };
 
