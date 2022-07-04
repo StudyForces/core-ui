@@ -2,7 +2,7 @@ import LandingLayout from "~/components/landing/landing-layout";
 import {Container} from "@chakra-ui/react";
 import {Outlet, useLoaderData} from "@remix-run/react";
 import {json, LoaderFunction} from "@remix-run/cloudflare";
-import authenticator from "~/services/auth.server";
+import tokenCheck from "~/services/token-check";
 
 export default function FeaturesIndex() {
     const {user} = useLoaderData();
@@ -22,7 +22,7 @@ export default function FeaturesIndex() {
 };
 
 export let loader: LoaderFunction = async ({ request }) => {
-    let user = await authenticator.isAuthenticated(request);
+    const user = await tokenCheck(request);
     return json({ user });
 };
 

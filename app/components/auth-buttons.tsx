@@ -35,7 +35,7 @@ function Authorized({user}: {user: User}) {
             rounded={'full'}
             variant={'link'}
             cursor={'pointer'}
-            minW={0}>
+            minW={0} translate={'no'}>
             {user.displayName}
         </MenuButton>
         <MenuList>

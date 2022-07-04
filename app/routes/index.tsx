@@ -3,9 +3,9 @@ import EnormousCatalog from "~/components/landing/home/enormous-catalog";
 import LandingLayout from "~/components/landing/landing-layout";
 import Qna from "~/components/landing/home/qna";
 import type {LoaderFunction} from "@remix-run/cloudflare";
-import authenticator from "~/services/auth.server";
 import {json} from "@remix-run/cloudflare";
 import {useLoaderData} from "@remix-run/react";
+import tokenCheck from "~/services/token-check";
 
 export default function Index() {
     const {user} = useLoaderData();
@@ -18,6 +18,6 @@ export default function Index() {
 }
 
 export let loader: LoaderFunction = async ({ request }) => {
-    let user = await authenticator.isAuthenticated(request);
+    const user = await tokenCheck(request);
     return json({ user });
 };

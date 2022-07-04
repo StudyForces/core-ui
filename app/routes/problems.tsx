@@ -1,8 +1,8 @@
 import ContentLayout from "~/components/content/content-layout";
 import {Outlet, useLoaderData} from "@remix-run/react";
 import type {LoaderFunction} from "@remix-run/cloudflare";
-import authenticator from "~/services/auth.server";
 import {json} from "@remix-run/cloudflare";
+import tokenCheck from "~/services/token-check";
 
 export default function Index() {
     const {user} = useLoaderData();
@@ -13,7 +13,7 @@ export default function Index() {
 }
 
 export let loader: LoaderFunction = async ({ request }) => {
-    let user = await authenticator.isAuthenticated(request);
+    const user = await tokenCheck(request);
     return json({ user });
 };
 
