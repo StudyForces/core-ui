@@ -21,7 +21,7 @@ import {
     ChevronDownIcon,
     ChevronRightIcon, SunIcon, MoonIcon,
 } from '@chakra-ui/icons';
-import {Link as RemixLink} from "@remix-run/react";
+import {NavLink as RemixLink} from "@remix-run/react";
 import User from "~/services/user";
 import AuthButtons from '../auth-buttons';
 

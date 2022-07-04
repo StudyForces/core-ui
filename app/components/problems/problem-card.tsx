@@ -3,9 +3,11 @@ import {
     Heading,
     Text,
     Stack,
-    Avatar,
-    useColorModeValue
+    Badge,
+    useColorModeValue, Button, Spacer, Flex, Icon
 } from '@chakra-ui/react';
+import {Link as RemixLink} from '@remix-run/react';
+import { FaArrowRight } from 'react-icons/fa';
 import Problem from "~/types/problem";
 
 export default function ProblemCard({problem}: {problem: Problem}) {
@@ -17,27 +19,52 @@ export default function ProblemCard({problem}: {problem: Problem}) {
             rounded={'md'}
             p={6}
             overflow={'hidden'}>
-            <Stack>
-                <Text
-                    color={useColorModeValue('brand.500', 'brand.300')}
-                    textTransform={'uppercase'}
-                    fontWeight={800}
-                    fontSize={'sm'}
-                    letterSpacing={1.1}>
-                    #{problem.id}
-                </Text>
-                <Heading
-                    noOfLines={1}
-                    color={useColorModeValue('gray.700', 'white')}
-                    fontSize={'2xl'}
-                    fontFamily={'body'}>
-                    {problem.problem}
-                </Heading>
-                <Text color={'gray.500'}
-                      noOfLines={3}>
-                    {problem.problem}
-                </Text>
-            </Stack>
+            <Flex direction={'column'} height={'100%'}>
+                <Stack flex={'auto'}>
+                    <Text
+                        color={useColorModeValue('brand.500', 'brand.300')}
+                        textTransform={'uppercase'}
+                        fontWeight={800}
+                        fontSize={'sm'}
+                        letterSpacing={1.1}>
+                        #{problem.id}
+                    </Text>
+
+                    <Heading
+                        noOfLines={1}
+                        fontSize={'2xl'}
+                        fontFamily={'body'}>
+                        {problem.problem}
+                    </Heading>
+
+                    <Text color={'gray.500'}
+                          noOfLines={3}>
+                        {problem.problem}
+                    </Text>
+                </Stack>
+
+                <Stack pt={6} direction={'row'} spacing={4} align={'center'}
+                       justify={'flex-end'} flex={0}>
+                    <Stack direction={'row'} spacing={0} fontSize={'sm'}>
+                        <Badge colorScheme='brand' variant={useColorModeValue('solid', 'outline')}>
+                            Physics
+                        </Badge>
+                    </Stack>
+
+                    <Spacer />
+
+                    <Button variant={'link'}
+                            as={RemixLink}
+                            to={`/problems/${problem.id}`}
+                            color={'brand.400'}
+                            _hover={{
+                                color: useColorModeValue('brand.500', 'brand.300'),
+                            }}>
+                        View
+                        <Icon ml={2} as={FaArrowRight}></Icon>
+                    </Button>
+                </Stack>
+            </Flex>
         </Box>
     );
 }

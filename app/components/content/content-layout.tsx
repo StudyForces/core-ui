@@ -12,16 +12,16 @@ import {
 import {FiMenu, FiSearch, MdHome, MdKeyboardArrowRight, RiAdminFill} from "react-icons/all";
 import {ReactNode} from "react";
 import {MoonIcon, SunIcon} from "@chakra-ui/icons";
-import { Link as RemixLink } from "@remix-run/react";
+import {NavLink as RemixLink} from "@remix-run/react";
 import {IoListSharp} from "react-icons/io5";
 import AuthButtons from "../auth-buttons";
 import User from "~/services/user";
 
-export default function ContentLayout({children, user}: {children: ReactNode, user?: User}) {
+export default function ContentLayout({children, user}: { children: ReactNode, user?: User }) {
     const sidebar = useDisclosure();
     const admin = useDisclosure();
     const color = useColorModeValue("gray.600", "gray.300");
-    const { colorMode, toggleColorMode } = useColorMode();
+    const {colorMode, toggleColorMode} = useColorMode();
 
     const NavItem = ({ icon, children, ...rest }: any) => {
         return (
@@ -141,9 +141,9 @@ export default function ContentLayout({children, user}: {children: ReactNode, us
                 onClose={sidebar.onClose}
                 placement="left"
             >
-                <DrawerOverlay />
+                <DrawerOverlay/>
                 <DrawerContent>
-                    <SidebarContent w="full" borderRight="none" />
+                    <SidebarContent w="full" borderRight="none"/>
                 </DrawerContent>
             </Drawer>
             <Box
@@ -176,7 +176,7 @@ export default function ContentLayout({children, user}: {children: ReactNode, us
                             md: "none",
                         }}
                         onClick={sidebar.onOpen}
-                        icon={<FiMenu />}
+                        icon={<FiMenu/>}
                         size="sm"
                     />
                     <InputGroup
@@ -187,18 +187,18 @@ export default function ContentLayout({children, user}: {children: ReactNode, us
                         }}
                     >
                         <InputLeftElement color="gray.500">
-                            <FiSearch />
+                            <FiSearch/>
                         </InputLeftElement>
-                        <Input placeholder="Search..." />
+                        <Input placeholder="Search..."/>
                     </InputGroup>
 
                     <Stack
-                        flex={{ base: 1, md: 0 }}
+                        flex={{base: 1, md: 0}}
                         justify={'flex-end'}
                         direction={'row'}
                         spacing={4}>
-                        <Button display={{ base: 'none', md: 'flex' }} onClick={toggleColorMode} variant={'link'}>
-                            {colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
+                        <Button display={{base: 'none', md: 'flex'}} onClick={toggleColorMode} variant={'link'}>
+                            {colorMode === 'light' ? <MoonIcon/> : <SunIcon/>}
                         </Button>
                         <AuthButtons user={user}></AuthButtons>
                     </Stack>

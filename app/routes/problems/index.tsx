@@ -2,10 +2,10 @@ import type {LoaderFunction} from "@remix-run/cloudflare";
 import tokenCheck from "~/services/token-check";
 import {useLoaderData} from "@remix-run/react";
 import {json} from "@remix-run/cloudflare";
-import { request as gqlreq } from '@ninetailed/cf-worker-graphql-request'
-import {SimpleGrid} from "@chakra-ui/react";
+import {request as gqlreq} from '@ninetailed/cf-worker-graphql-request'
+import {Heading, SimpleGrid, Container} from "@chakra-ui/react";
 import ProblemCard from "~/components/problems/problem-card";
-import Problem from "~/types/problem";
+import type Problem from "~/types/problem";
 
 export const loader: LoaderFunction = async ({request}) => {
     const params = Object.fromEntries(new URL(request.url).searchParams.entries());
@@ -37,15 +37,25 @@ export const loader: LoaderFunction = async ({request}) => {
 export default function ProblemsIndex() {
     const {count, page, results} = useLoaderData();
 
-    return <SimpleGrid
-        columns={{
-            base: 1,
-            md: 2
-        }}
-        spacing={4}
-    >
-        {
-            results.problems.map((problem: Problem) => <ProblemCard key={problem.id} problem={problem}></ProblemCard>)
-        }
-    </SimpleGrid>;
+    return <Container maxW={'5xl'}>
+        <Heading
+            mt={2}
+            mb={6}
+            fontSize={'4xl'}
+            fontFamily={'body'}>
+            Problems
+        </Heading>
+        <SimpleGrid
+            columns={{
+                base: 1,
+                md: 2
+            }}
+            spacing={4}
+        >
+            {
+                results.problems.map((problem: Problem) => <ProblemCard key={problem.id}
+                                                                        problem={problem}></ProblemCard>)
+            }
+        </SimpleGrid>
+    </Container>;
 }
