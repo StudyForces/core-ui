@@ -1,5 +1,4 @@
 export default interface User {
-    accessToken: string;
     id: string;
     displayName: string;
     name: {
@@ -7,4 +6,8 @@ export default interface User {
         givenName: string;
     };
     emails: Array<{ value: string }>;
+    _token: {
+        accessToken: string;
+        refreshToken: string;
+    }
 }

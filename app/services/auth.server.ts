@@ -19,13 +19,16 @@ authenticator.use(
             // what you do inside this and how you find the user is up to you
 
             let user: User = {
-                accessToken: accessToken,
                 displayName: profile.displayName,
                 emails: profile.emails,
                 id: profile.id,
                 name: {
                     familyName: profile.name.familyName,
                     givenName: profile.name.givenName
+                },
+                _token: {
+                    accessToken,
+                    refreshToken,
                 }
             };
 
