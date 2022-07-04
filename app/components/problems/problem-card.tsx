@@ -9,6 +9,7 @@ import {
 import {Link as RemixLink} from '@remix-run/react';
 import { FaArrowRight } from 'react-icons/fa';
 import Problem from "~/types/problem";
+import ReactKatex from "@pkasila/react-katex";
 
 export default function ProblemCard({problem}: {problem: Problem}) {
     return (
@@ -34,12 +35,12 @@ export default function ProblemCard({problem}: {problem: Problem}) {
                         noOfLines={1}
                         fontSize={'2xl'}
                         fontFamily={'body'}>
-                        {problem.problem}
+                        <ReactKatex output={'mathml'} children={problem.problem}></ReactKatex>
                     </Heading>
 
                     <Text color={'gray.500'}
                           noOfLines={3}>
-                        {problem.problem}
+                        <ReactKatex output={'mathml'} children={problem.problem}></ReactKatex>
                     </Text>
                 </Stack>
 

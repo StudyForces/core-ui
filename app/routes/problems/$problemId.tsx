@@ -6,6 +6,7 @@ import {request as gqlreq} from '@ninetailed/cf-worker-graphql-request'
 import {Heading, Container, chakra, Stack, useColorModeValue} from "@chakra-ui/react";
 import type Problem from "~/types/problem";
 import SectionCard from "~/components/problems/section-card";
+import ReactKatex from "@pkasila/react-katex";
 
 export const loader: LoaderFunction = async ({request, params}) => {
     const user = await tokenCheck(request);
@@ -50,17 +51,17 @@ export default function ProblemView() {
                 <chakra.span color={useColorModeValue('brand.500', 'brand.300')}>
                     #{problem.id}
                 </chakra.span>{' '}
-                {problem.problem}
+                <ReactKatex output={'mathml'} children={problem.problem}></ReactKatex>
             </Heading>
 
             <Stack spacing={4}>
                 <SectionCard title={'Problem'}>
-                    {problem.problem}
+                    <ReactKatex output={'mathml'} children={problem.problem}></ReactKatex>
                 </SectionCard>
 
                 {
                     problem.solution != null ? <SectionCard title={'Solution'}>
-                        {problem.solution}
+                        <ReactKatex output={'mathml'} children={problem.solution}></ReactKatex>
                     </SectionCard> : null
                 }
             </Stack>
