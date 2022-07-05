@@ -1,6 +1,8 @@
 import {Box, chakra, Flex, Stack, Image, Link, useColorModeValue} from "@chakra-ui/react";
+import {Link as RemixLink} from '@remix-run/react';
+import type User from "~/services/user";
 
-export default function CallAction() {
+export default function CallAction({user}: {user: User}) {
     return <Flex
         direction={{
             base: "column",
@@ -35,7 +37,11 @@ export default function CallAction() {
                 }}
                 mb={6}
             >
-                <chakra.span display="block">Are you ready?</chakra.span>
+                <chakra.span display="block">
+                    {
+                        user ? 'Seems you are ready!' : 'Are you ready?'
+                    }
+                </chakra.span>
                 <chakra.span
                     display="block"
                     color="white"
@@ -91,8 +97,12 @@ export default function CallAction() {
                                 bg: "brand.600",
                             },
                         }}
+                        as={RemixLink}
+                        to={'/problems'}
                     >
-                        Sign up for free
+                        {
+                            user ? 'Search for problems' : 'Sign up for free'
+                        }
                     </Link>
                 </Box>
             </Stack>

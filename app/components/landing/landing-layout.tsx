@@ -14,7 +14,7 @@ export default function LandingLayout({children, user}: {children: ReactNode, us
             children
         }
         <Box pt={20}>
-            <CallAction></CallAction>
+            <CallAction user={user}></CallAction>
         </Box>
         <Footer></Footer>
     </>;
