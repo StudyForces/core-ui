@@ -4,4 +4,5 @@ export default interface Problem {
     solution?: string;
     published: boolean;
     attachments: any[];
+    sourcesId: number;
 }

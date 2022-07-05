@@ -3,12 +3,11 @@ import {
     Heading,
     Text,
     Stack,
-    Badge,
     useColorModeValue, Button, Spacer, Flex, Icon
 } from '@chakra-ui/react';
 import {Link as RemixLink} from '@remix-run/react';
 import { FaArrowRight } from 'react-icons/fa';
-import Problem from "~/types/problem";
+import type Problem from "~/types/problem";
 import ReactKatex from "@pkasila/react-katex";
 
 export default function ProblemCard({problem}: {problem: Problem}) {
