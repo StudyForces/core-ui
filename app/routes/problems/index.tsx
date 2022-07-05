@@ -1,4 +1,4 @@
-import type {LoaderFunction} from "@remix-run/cloudflare";
+import type {LoaderFunction, MetaFunction} from "@remix-run/cloudflare";
 import tokenCheck from "~/services/token-check";
 import {useLoaderData} from "@remix-run/react";
 import {json} from "@remix-run/cloudflare";
@@ -33,6 +33,13 @@ export const loader: LoaderFunction = async ({request}) => {
 
     return json({count, page, results});
 }
+
+export const meta: MetaFunction = () => {
+    return {
+        title: 'Problems',
+        description: 'Catalog of problems',
+    };
+};
 
 export default function ProblemsIndex() {
     const {count, page, results} = useLoaderData();

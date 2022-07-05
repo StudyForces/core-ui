@@ -1,4 +1,4 @@
-import {Box, chakra, Flex, Stack, Image, Link} from "@chakra-ui/react";
+import {Box, chakra, Flex, Stack, Image, Link, useColorModeValue} from "@chakra-ui/react";
 
 export default function CallAction() {
     return <Flex
@@ -6,12 +6,7 @@ export default function CallAction() {
             base: "column",
             md: "row",
         }}
-        _light={{
-            bg: "brand.500",
-        }}
-        _dark={{
-            bg: "brand.900"
-        }}
+        bg={useColorModeValue('brand.500', 'brand.900')}
         px={8}
         py={24}
         mx="auto"
@@ -88,13 +83,8 @@ export default function CallAction() {
                         fontWeight="bold"
                         w="full"
                         rounded="md"
-                        _light={{
-                            color: "white",
-                        }}
-                        bg="brand.600"
-                        _dark={{
-                            bg: "brand.500",
-                        }}
+                        color={'white'}
+                        bg={useColorModeValue('brand.600', 'brand.500')}
                         _hover={{
                             bg: "brand.700",
                             _dark: {

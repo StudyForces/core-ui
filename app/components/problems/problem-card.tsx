@@ -46,10 +46,7 @@ export default function ProblemCard({problem}: {problem: Problem}) {
 
                 <Stack pt={6} direction={'row'} spacing={4} align={'center'}
                        justify={'flex-end'} flex={0}>
-                    <Stack direction={'row'} spacing={0} fontSize={'sm'}>
-                        <Badge colorScheme='brand' variant={useColorModeValue('solid', 'outline')}>
-                            Physics
-                        </Badge>
+                    <Stack direction={'row'} spacing={1} fontSize={'sm'}>
                     </Stack>
 
                     <Spacer />

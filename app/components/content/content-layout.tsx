@@ -82,7 +82,9 @@ export default function ContentLayout({children, user}: { children: ReactNode, u
                 />
             </NavItem>
             <Collapse in={editor.isOpen}>
-                <NavItem pl="12" py="2" as={RemixLink} to={'/editor/problems'}>Problems</NavItem>
+                <NavItem pl="12" py="2" as={RemixLink} to={'/editor/problems?selection=all'}>All problems</NavItem>
+                <NavItem pl="12" py="2" as={RemixLink} to={'/editor/problems?selection=unpublished'}>Unpublished problems</NavItem>
+                <NavItem pl="12" py="2" as={RemixLink} to={'/editor/problems?selection=published'}>Published problems</NavItem>
             </Collapse>
         </>;
     }
