@@ -15,7 +15,7 @@ import {
 import ReactKatex from "@pkasila/react-katex";
 import {Link as RemixLink} from "@remix-run/react/dist/components";
 
-export default function ProblemRow({problem}: {problem: Problem}) {
+export default function ProblemRow({problem, url}: {problem: Problem, url: string}) {
     const submit = useSubmit();
     const transition = useTransition();
     const badgeVariant = useColorModeValue('solid', 'outline');
@@ -23,12 +23,15 @@ export default function ProblemRow({problem}: {problem: Problem}) {
 
     const publish = (problem: Problem) => {
         submit({
+            url,
             published: !problem.published ? 'true' : 'false'
         }, { method: "put", action: `/editor/problems/${problem.id}` });
     }
 
     const remove = (problem: Problem) => {
-        submit(null, { method: "delete", action: `/editor/problems/${problem.id}` });
+        submit({
+            url
+        }, { method: "delete", action: `/editor/problems/${problem.id}` });
     }
 
     return <Tr key={problem.id}>
@@ -44,7 +47,7 @@ export default function ProblemRow({problem}: {problem: Problem}) {
         </Td>
         <Td>
             <Text noOfLines={3}>
-                <ReactKatex strict={'ignore'} output={'mathml'} children={problem.problem} />
+                <ReactKatex strict={false} children={problem.problem} />
             </Text>
         </Td>
         <Td>

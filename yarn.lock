@@ -2007,10 +2007,10 @@
   dependencies:
     "json-parse-even-better-errors" "^2.3.1"
 
-"@pkasila/react-katex@^1.0.0":
-  "integrity" "sha512-fuLJt1mENcdEzTWlgJSFPglholLQaO8qenBP+jP0eeiY3uHhtEFmrgdR97baUtc/+RqKgkblmObvwiWmTCLe/Q=="
-  "resolved" "https://registry.npmjs.org/@pkasila/react-katex/-/react-katex-1.0.0.tgz"
-  "version" "1.0.0"
+"@pkasila/react-katex@^1.1.0":
+  "integrity" "sha512-12YIlRCLw7aAUMhG2ulr4Gz6LDwFnQMoqk/gV6tnhm+j8ksicydjA9DJrdxUDqcVVT6SlDku+SYPRzdCu/rDWA=="
+  "resolved" "https://registry.npmjs.org/@pkasila/react-katex/-/react-katex-1.1.0.tgz"
+  "version" "1.1.0"
   dependencies:
     "katex" "^0.16.0"
     "prop-types" "^15.8.1"

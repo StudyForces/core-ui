@@ -9,19 +9,17 @@ import {
     TableContainer,
     Table,
     Thead,
-    Td,
     Th,
     Tbody,
     Tfoot,
     Tr,
     useColorModeValue,
-    Box, Badge, useBreakpointValue, Menu, MenuButton, MenuGroup, MenuList, MenuItem, MenuDivider, Button, Text
+    Box, useBreakpointValue
 } from "@chakra-ui/react";
 import type Problem from "~/types/problem";
-import ReactKatex from "@pkasila/react-katex";
 import ProblemRow from "~/components/editor/problem-row";
 
-export const loader: LoaderFunction = async ({ request }) => {
+export const loader: LoaderFunction = async ({request}) => {
     const params = Object.fromEntries(new URL(request.url).searchParams.entries());
     const count = parseInt(params.size ?? "100", 10);
     const page = parseInt(params.page ?? "0", 10);
@@ -47,18 +45,20 @@ export const loader: LoaderFunction = async ({ request }) => {
         count: count, offset: page * count, selection
     });
 
-    return json({count, page, selection, results});
+    const url = new URL(request.url);
+
+    return json({count, page, selection, results, url: url.pathname+url.search});
 }
 
 export const meta: MetaFunction = ({data}) => {
     return {
-        title: `Editor/Problems ${data.selection}`,
+        title: `Editor/Problems/${data.selection}`,
         description: 'Catalog of problems',
     };
 };
 
 export default function EditorProblemsIndex() {
-    const {count, page, selection, results} = useLoaderData();
+    const {count, page, selection, results, url} = useLoaderData();
 
     return <Container maxW={'5xl'}>
         <Heading
@@ -66,7 +66,7 @@ export default function EditorProblemsIndex() {
             mb={6}
             fontSize={'4xl'}
             fontFamily={'body'}>
-            Editor/Problems
+            Editor/Problems/{selection}
         </Heading>
         <Box w={'full'}
              bg={useColorModeValue('white', 'gray.900')}
@@ -86,7 +86,8 @@ export default function EditorProblemsIndex() {
                     </Thead>
                     <Tbody>
                         {
-                            results.problems.map((problem: Problem) => <ProblemRow problem={problem}></ProblemRow>)
+                            results.problems.map((problem: Problem) => <ProblemRow key={problem.id} problem={problem}
+                                                                                   url={url}></ProblemRow>)
                         }
                     </Tbody>
                     <Tfoot>

@@ -2,7 +2,7 @@ import {Box, chakra, Flex, Stack, Image, Link, useColorModeValue} from "@chakra-
 import {Link as RemixLink} from '@remix-run/react';
 import type User from "~/services/user";
 
-export default function CallAction({user}: {user: User}) {
+export default function CallAction({user}: {user?: User}) {
     return <Flex
         direction={{
             base: "column",

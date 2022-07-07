@@ -62,7 +62,7 @@ export default function ContentLayout({children, user}: { children: ReactNode, u
     };
 
     const EditorNavItems = () => {
-        const editor = useDisclosure();
+        const editor = useDisclosure({isOpen: true});
 
         if (user === null || user === undefined) {
             return null;
@@ -221,7 +221,7 @@ export default function ContentLayout({children, user}: { children: ReactNode, u
                     </Stack>
                 </Flex>
 
-                <Box as="main" p="4">
+                <Box as="main" pt={4}>
                     {children}
                 </Box>
             </Box>

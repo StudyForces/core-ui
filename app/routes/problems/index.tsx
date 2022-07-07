@@ -11,7 +11,6 @@ export const loader: LoaderFunction = async ({request}) => {
     const params = Object.fromEntries(new URL(request.url).searchParams.entries());
     const count = parseInt(params.size ?? "100", 10);
     const page = parseInt(params.page ?? "0", 10);
-    const user = await tokenCheck(request);
 
     const query = `query ProblemsIndex($count: Int, $offset: Int) {
     problems(count: $count, offset: $offset, selection: PUBLISHED) {
@@ -20,12 +19,6 @@ export const loader: LoaderFunction = async ({request}) => {
         problem
     }
 }`
-
-    const headers: any = {};
-
-    if (user?._token.accessToken !== null) {
-        headers['Authorization'] = `Bearer ${user?._token.accessToken}`;
-    }
 
     const results = await gqlreq('https://coreapi-sf.pkasila.net/graphql', query, {
         count: count, offset: page * count

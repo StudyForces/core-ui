@@ -9,8 +9,6 @@ import SectionCard from "~/components/problems/section-card";
 import ReactKatex from "@pkasila/react-katex";
 
 export const loader: LoaderFunction = async ({request, params}) => {
-    const user = await tokenCheck(request);
-
     const query = `query ProblemView($id: ID!) {
     problem: problemById(id: $id) {
         id
@@ -26,13 +24,7 @@ export const loader: LoaderFunction = async ({request, params}) => {
     }
 }`
 
-    const headers: any = {};
-
-    if (user?._token.accessToken !== null) {
-        headers['Authorization'] = `Bearer ${user?._token.accessToken}`;
-    }
-
-    const results = await gqlreq('https://coreapi-sf.pkasila.net/graphql', query, {
+    const results = await gqlreq('https://coreapi-sf.pkasila.net/graphql', query,{
         id: params.problemId
     });
 
@@ -65,7 +57,7 @@ export default function ProblemView() {
                     #{problem.id}
                 </chakra.span>
                 {' '}
-                <ReactKatex output={'mathml'} children={problem.problem}></ReactKatex>
+                <ReactKatex strict={false} children={problem.problem}></ReactKatex>
             </Heading>
 
             <Stack my={4} direction={'row'} spacing={1} fontSize={'sm'} aria-hidden={true}>
@@ -78,12 +70,12 @@ export default function ProblemView() {
 
             <Stack spacing={4}>
                 <SectionCard title={'Problem'}>
-                    <ReactKatex output={'mathml'} children={problem.problem}></ReactKatex>
+                    <ReactKatex strict={false} children={problem.problem}></ReactKatex>
                 </SectionCard>
 
                 {
                     problem.solution != null ? <SectionCard title={'Solution'}>
-                        <ReactKatex output={'mathml'} children={problem.solution}></ReactKatex>
+                        <ReactKatex strict={'ignore'} children={problem.solution}></ReactKatex>
                     </SectionCard> : null
                 }
 

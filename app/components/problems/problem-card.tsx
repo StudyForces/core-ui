@@ -34,12 +34,12 @@ export default function ProblemCard({problem}: {problem: Problem}) {
                         noOfLines={1}
                         fontSize={'2xl'}
                         fontFamily={'body'}>
-                        <ReactKatex output={'mathml'} children={problem.problem}></ReactKatex>
+                        <ReactKatex strict={false} children={problem.problem}></ReactKatex>
                     </Heading>
 
                     <Text color={'gray.500'}
                           noOfLines={3}>
-                        <ReactKatex output={'mathml'} children={problem.problem}></ReactKatex>
+                        <ReactKatex strict={false} children={problem.problem}></ReactKatex>
                     </Text>
                 </Stack>
 
