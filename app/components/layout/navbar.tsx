@@ -277,21 +277,6 @@ const NAV_ITEMS: Array<NavItem> = [
         remix: true,
     },
     {
-        label: 'Q&A',
-        children: [
-            {
-                label: 'Search questions',
-                subLabel: 'Find answer or ask your question',
-                href: '#',
-            },
-            {
-                label: 'Answer questions',
-                subLabel: 'Share your knowledge with others',
-                href: '#',
-            },
-        ],
-    },
-    {
         label: 'Features',
         href: '/features',
         remix: true
