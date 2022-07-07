@@ -53,11 +53,10 @@ export default function ProblemView() {
                 mb={4}
                 fontSize={'4xl'}
                 fontFamily={'body'}>
+                Problem{' '}
                 <chakra.span color={useColorModeValue('brand.500', 'brand.300')}>
                     #{problem.id}
                 </chakra.span>
-                {' '}
-                <ReactKatex strict={false} children={problem.problem}></ReactKatex>
             </Heading>
 
             <Stack my={4} direction={'row'} spacing={1} fontSize={'sm'} aria-hidden={true}>
