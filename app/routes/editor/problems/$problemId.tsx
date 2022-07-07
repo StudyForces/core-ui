@@ -197,8 +197,9 @@ export default function EditorProblem() {
                             <Checkbox isChecked={hasSolution} onChange={(e) => setHasSolution(e.target.checked)}>
                                 Add Solution
                             </Checkbox>
-                            <Checkbox isChecked={results.problem.published} disabled={hasChanges || transition.state !== 'idle'}
-                                      onChange={!hasChanges ? (e) => publish(e.target.checked) : undefined}>
+                            <Checkbox isChecked={results.problem.published}
+                                      disabled={transition.state !== 'idle'}
+                                      onChange={transition.state === 'idle' ? (e) => publish(e.target.checked) : undefined}>
                                 {
                                     transition.state === 'idle' ? 'Published' : 'Loading...'
                                 }
@@ -260,8 +261,8 @@ export default function EditorProblem() {
             <Container maxW={'5xl'} py={4}>
                 <Stack direction={'row'}>
                     <Button colorScheme='brand'
-                            onClick={save}
-                            disabled={transition.state !== 'idle'}
+                            onClick={hasChanges ? save : undefined}
+                            disabled={transition.state !== 'idle' || !hasChanges}
                             isLoading={transition.state !== 'idle'}>
                         Save
                     </Button>

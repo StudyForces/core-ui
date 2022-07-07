@@ -275,24 +275,6 @@ const NAV_ITEMS: Array<NavItem> = [
         label: 'Problems',
         href: '/problems',
         remix: true,
-        children: [
-            {
-                label: 'Physics',
-                href: '#',
-            },
-            {
-                label: 'Maths',
-                href: '#',
-            },
-            {
-                label: 'Chemistry',
-                href: '#',
-            },
-            {
-                label: 'All subjects',
-                href: '#',
-            },
-        ],
     },
     {
         label: 'Q&A',
