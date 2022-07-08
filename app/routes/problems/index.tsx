@@ -12,7 +12,7 @@ export const loader: LoaderFunction = async ({request}) => {
     const page = parseInt(params.page ?? "0", 10);
 
     const query = `query ProblemsIndex($page: Int, $size: Int) {
-    problems(page: $page, size: $size, selection: PUBLISHED) {
+    problems(page: $page, size: $size) {
         id
         type
         problem

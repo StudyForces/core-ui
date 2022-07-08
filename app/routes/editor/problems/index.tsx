@@ -27,11 +27,12 @@ export const loader: LoaderFunction = async ({request}) => {
     const user = await tokenCheck(request);
 
     const query = `query EditorProblemsIndex($page: Int, $size: Int, $selection: ProblemSelection) {
-    problems(page: $page, size: $size, selection: $selection) {
+    problems: myProblems(page: $page, size: $size, selection: $selection) {
         id
         problem
         published
         sourcesId
+        createdBy
     }
 }`
 

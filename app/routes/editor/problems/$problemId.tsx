@@ -62,12 +62,25 @@ export const action: ActionFunction = async ({ request, params }) => {
 }`;
             break;
         case 'put':
-            variables["published"] = data.get('published') === 'true';
-            query = `mutation ProblemPublish($id: ID!, $published: Boolean) {
+            switch (data.get('act')) {
+            case 'publish':
+                variables["published"] = data.get('published') === 'true';
+                query = `mutation ProblemPublish($id: ID!, $published: Boolean) {
     publishProblem(id: $id, published: $published) {
         id
     }
 }`;
+                break;
+            case 'own':
+                query = `mutation ProblemOwn($id: ID!) {
+    takeProblem(id: $id) {
+        id
+    }
+}`;
+                break;
+            default:
+                return redirect(redirectPath);
+            }
             break;
         default:
             return redirect(redirectPath);
@@ -90,6 +103,7 @@ export const loader: LoaderFunction = async ({request, params}) => {
         solution
         sourcesId
         published
+        createdBy
         attachments {
             fileName
             url: signedUrl
@@ -155,6 +169,7 @@ export default function EditorProblem() {
     const publish = (published: boolean) => {
         submit({
             url,
+            act: 'publish',
             published: published ? 'true' : 'false'
         }, { method: "put", action: `/editor/problems/${results.problem.id}` });
     }

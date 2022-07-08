@@ -1,4 +1,4 @@
-import ProblemType from "~/types/problem-type";
+import type ProblemType from "~/types/problem-type";
 
 export default interface Problem {
     id: number;
@@ -8,4 +8,8 @@ export default interface Problem {
     published: boolean;
     attachments: any[];
     sourcesId: number;
+    createdBy?: string;
+    createdDate: number;
+    modifiedBy?: string;
+    modifiedDate: number;
 }

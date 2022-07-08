@@ -24,7 +24,15 @@ export default function ProblemRow({problem, url}: {problem: Problem, url: strin
     const publish = (problem: Problem) => {
         submit({
             url,
+            act: 'publish',
             published: !problem.published ? 'true' : 'false'
+        }, { method: "put", action: `/editor/problems/${problem.id}` });
+    }
+
+    const takeOwnership = (problem: Problem) => {
+        submit({
+            url,
+            act: 'own'
         }, { method: "put", action: `/editor/problems/${problem.id}` });
     }
 
@@ -59,6 +67,11 @@ export default function ProblemRow({problem, url}: {problem: Problem, url: strin
                     <MenuGroup title='Core'>
                         <MenuItem as={RemixLink} to={`/problems/${problem.id}`}>View</MenuItem>
                         <MenuItem as={RemixLink} to={`${problem.id}`}>Edit</MenuItem>
+                        {
+                            problem.createdBy == null ? <MenuItem onClick={() => takeOwnership(problem)}>
+                                Take ownership
+                            </MenuItem> : null
+                        }
                         <MenuItem onClick={() => publish(problem)}>
                             {
                                 problem.published ? 'Unpublish' : 'Publish'
