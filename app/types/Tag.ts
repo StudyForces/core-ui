@@ -1,5 +1,6 @@
 export default interface Tag {
-    id: string;
+    id: number;
     title?: string;
     color?: string;
+    parent?: Tag;
 }

@@ -12,16 +12,19 @@ import {
     Image,
     Radio, RadioGroup,
     SimpleGrid,
-    Stack,
+    Skeleton,
+    Stack, Tag,
     Textarea,
     useColorModeValue
 } from "@chakra-ui/react";
 import ReactKatex from "@pkasila/react-katex";
 import {useLoaderData, useSubmit, useTransition} from "@remix-run/react";
+import { ClientOnly } from "remix-utils";
 import type Problem from "~/types/problem";
-import {useState} from "react";
+import {Fragment, useState} from "react";
 import SectionCard from "~/components/problems/section-card";
 import ProblemType from "~/types/problem-type";
+import TagsSelector from "~/components/editor/tags-selector.client";
 
 export const action: ActionFunction = async ({ request, params }) => {
     const data = await request.formData();
@@ -54,6 +57,7 @@ export const action: ActionFunction = async ({ request, params }) => {
                 problem: data.get('problem'),
                 solution: solution === '' ? null : solution,
                 type: data.get('type'),
+                tagIds: (data.get('tags') as string).split(',').map(id => parseInt(id, 10))
             };
             query = `mutation ProblemUpdate($id: ID!, $input: ProblemInput) {
     updateProblem(id: $id, input: $input) {
@@ -108,6 +112,11 @@ export const loader: LoaderFunction = async ({request, params}) => {
             fileName
             url: signedUrl
         }
+        tags {
+            id
+            color
+            title
+        }
     }
 }`
 
@@ -135,8 +144,11 @@ export const meta: MetaFunction = ({data}) => {
 };
 
 export default function EditorProblem() {
+    const badgeVariant = useColorModeValue('solid', 'outline');
+
     const {results, url} = useLoaderData() as {results: {problem: Problem}, url: string};
     const [type, setType] = useState(results.problem.type);
+    const [tags, setTags] = useState(results.problem.tags ?? []);
     const [problem, setProblem] = useState(results.problem.problem);
     const [solution, setSolution] = useState(results.problem.solution ?? '');
     const [hasSolution, setHasSolution] = useState(results.problem.solution !== null && results.problem.solution !== '');
@@ -162,7 +174,8 @@ export default function EditorProblem() {
             url,
             problem,
             solution: hasSolution ? solution : '',
-            type
+            type,
+            tags: tags.map(t => `${t.id}`).join(',')
         }, { method: "post", action: `/editor/problems/${results.problem.id}` });
     }
 
@@ -189,6 +202,7 @@ export default function EditorProblem() {
 
     const hasChanges: boolean = problem !== results.problem.problem ||
                                 type !== results.problem.type ||
+                                tags !== results.problem.tags ||
                                 solution !== (results.problem.solution ?? '') ||
                                 hasSolution !== (results.problem.solution !== null && results.problem.solution !== '');
 
@@ -272,7 +286,19 @@ export default function EditorProblem() {
                 }
 
                 <SectionCard title={'Tags'}>
-
+                    {
+                        tags.map(tag => <Fragment key={tag.id}>
+                            <Tag colorScheme={tag.color} variant={badgeVariant} size={'lg'}>
+                                {tag.title}
+                            </Tag>
+                            {' '}
+                        </Fragment>)
+                    }
+                    <Box height={'200px'} style={{overflowY: 'scroll'}} mt={4}>
+                        <ClientOnly fallback={<Skeleton height='200px' />}
+                                    children={() => <TagsSelector tags={tags}
+                                                                  onChange={tags => setTags(tags)}></TagsSelector>} />
+                    </Box>
                 </SectionCard>
             </Stack>
         </Container>

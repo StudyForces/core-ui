@@ -12,6 +12,7 @@
     "postinstall": "remix-esbuild-override"
   },
   "dependencies": {
+    "@apollo/client": "^3.6.9",
     "@chakra-ui/icons": "^2.0.2",
     "@chakra-ui/react": "^2.2.1",
     "@emotion/react": "^11",
@@ -30,7 +31,8 @@
     "react-dom": "^18.2.0",
     "react-icons": "^4.4.0",
     "remix-auth": "^3.2.2",
-    "remix-auth-oauth2": "^1.2.2"
+    "remix-auth-oauth2": "^1.2.2",
+    "remix-utils": "^3.3.0"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^3.10.0",

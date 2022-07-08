@@ -1,5 +1,5 @@
 import {Box, Heading, Text, useColorModeValue} from "@chakra-ui/react";
-import {ReactNode} from "react";
+import type {ReactNode} from "react";
 
 export default function SectionCard({children, title}: {children: ReactNode, title?: string}) {
     return <Box
