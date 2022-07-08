@@ -1,12 +1,12 @@
 import type {LoaderFunction, MetaFunction} from "@remix-run/cloudflare";
-import tokenCheck from "~/services/token-check";
 import {useLoaderData} from "@remix-run/react";
 import {json} from "@remix-run/cloudflare";
 import {request as gqlreq} from '@ninetailed/cf-worker-graphql-request'
-import {Heading, Container, chakra, Stack, useColorModeValue, Badge, Image, Box, SimpleGrid} from "@chakra-ui/react";
+import {Heading, Container, chakra, Stack, useColorModeValue, Image, Box, SimpleGrid, Tag} from "@chakra-ui/react";
 import type Problem from "~/types/problem";
 import SectionCard from "~/components/problems/section-card";
 import ReactKatex from "@pkasila/react-katex";
+import {Fragment} from "react";
 
 export const loader: LoaderFunction = async ({request, params}) => {
     const query = `query ProblemView($id: ID!) {
@@ -20,6 +20,11 @@ export const loader: LoaderFunction = async ({request, params}) => {
         attachments {
             fileName
             url: signedUrl
+        }
+        tags {
+            id
+            title
+            color
         }
     }
 }`
@@ -61,9 +66,18 @@ export default function ProblemView() {
 
             <Stack my={4} direction={'row'} spacing={1} fontSize={'sm'} aria-hidden={true}>
                 {
-                    !problem.published ? <Badge colorScheme='red' variant={badgeVariant}>
-                        Not Published
-                    </Badge> : null
+                    !problem.published ? <Tag colorScheme='red' variant={badgeVariant} size={'lg'}>
+                        Private
+                    </Tag> : null
+                }
+                {' '}
+                {
+                    problem.tags?.map(tag => <Fragment key={tag.id}>
+                        <Tag colorScheme={tag.color} variant={badgeVariant} size={'lg'}>
+                            {tag.title}
+                        </Tag>
+                        {' '}
+                    </Fragment>)
                 }
             </Stack>
 

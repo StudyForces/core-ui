@@ -33,6 +33,11 @@ export const loader: LoaderFunction = async ({request}) => {
         published
         sourcesId
         createdBy
+        tags {
+            id
+            title
+            color
+        }
     }
 }`
 
@@ -81,7 +86,7 @@ export default function EditorProblemsIndex() {
                     <Thead>
                         <Tr>
                             <Th isNumeric>#</Th>
-                            <Th>Published</Th>
+                            <Th>Tags</Th>
                             <Th>Problem</Th>
                             <Th>Actions</Th>
                         </Tr>

@@ -174,6 +174,13 @@ export default function EditorProblem() {
         }, { method: "put", action: `/editor/problems/${results.problem.id}` });
     }
 
+    const takeOwnership = () => {
+        submit({
+            url,
+            act: 'own'
+        }, { method: "put", action: `/editor/problems/${results.problem.id}` });
+    }
+
     const remove = () => {
         submit({
             url: '/editor/problems'
@@ -263,6 +270,10 @@ export default function EditorProblem() {
                         </SimpleGrid>
                     </SectionCard> : null
                 }
+
+                <SectionCard title={'Tags'}>
+
+                </SectionCard>
             </Stack>
         </Container>
 
@@ -287,6 +298,14 @@ export default function EditorProblem() {
                             isLoading={transition.state !== 'idle'}>
                         Delete
                     </Button>
+                    {
+                        results.problem.createdBy == null ? <Button colorScheme='blue'
+                                                            onClick={takeOwnership}
+                                                            disabled={transition.state !== 'idle'}
+                                                            isLoading={transition.state !== 'idle'}>
+                            Take ownership
+                        </Button> : null
+                    }
                 </Stack>
             </Container>
         </Box>

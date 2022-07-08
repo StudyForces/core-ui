@@ -1,19 +1,19 @@
 import type Problem from "~/types/problem";
 import {useSubmit, useTransition} from "@remix-run/react";
 import {
-    Badge,
     Button,
     Menu,
     MenuButton, MenuDivider,
     MenuGroup,
     MenuItem,
-    MenuList,
+    MenuList, Stack, Tag,
     Td,
     Text, Tr,
     useColorModeValue
 } from "@chakra-ui/react";
 import ReactKatex from "@pkasila/react-katex";
 import {Link as RemixLink} from "@remix-run/react/dist/components";
+import {Fragment} from "react";
 
 export default function ProblemRow({problem, url}: {problem: Problem, url: string}) {
     const submit = useSubmit();
@@ -45,13 +45,23 @@ export default function ProblemRow({problem, url}: {problem: Problem, url: strin
     return <Tr key={problem.id}>
         <Td>{problem.id}</Td>
         <Td>
-            {
-                problem.published ? <Badge colorScheme='blue' variant={badgeVariant}>
-                    Published
-                </Badge> : <Badge colorScheme='red' variant={badgeVariant}>
-                    Not Published
-                </Badge>
-            }
+            <Stack direction={'column'} spacing={1} align={'center'}>
+                {
+                    problem.published ? <Tag colorScheme='blue' variant={badgeVariant} size={'sm'}>
+                        Public
+                    </Tag> : <Tag colorScheme='red' variant={badgeVariant} size={'sm'}>
+                        Private
+                    </Tag>
+                }
+                {
+                    problem.tags?.slice(0, 1).map(tag => <Fragment key={tag.id}>
+                        <Tag colorScheme={tag.color} variant={badgeVariant} size={'sm'}>
+                            {tag.title}
+                        </Tag>
+                        {' '}
+                    </Fragment>)
+                }
+            </Stack>
         </Td>
         <Td>
             <Text noOfLines={3}>
