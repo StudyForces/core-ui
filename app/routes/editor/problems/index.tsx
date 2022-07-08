@@ -21,13 +21,13 @@ import ProblemRow from "~/components/editor/problem-row";
 
 export const loader: LoaderFunction = async ({request}) => {
     const params = Object.fromEntries(new URL(request.url).searchParams.entries());
-    const count = parseInt(params.size ?? "100", 10);
+    const size = parseInt(params.size ?? "100", 10);
     const page = parseInt(params.page ?? "0", 10);
     const selection = (params.selection ?? 'all').toUpperCase();
     const user = await tokenCheck(request);
 
-    const query = `query EditorProblemsIndex($count: Int, $offset: Int, $selection: ProblemSelection) {
-    problems(count: $count, offset: $offset, selection: $selection) {
+    const query = `query EditorProblemsIndex($page: Int, $size: Int, $selection: ProblemSelection) {
+    problems(page: $page, size: $size, selection: $selection) {
         id
         problem
         published
@@ -42,12 +42,12 @@ export const loader: LoaderFunction = async ({request}) => {
     }
 
     const results = await gqlreq('https://coreapi-sf.pkasila.net/graphql', query, {
-        count: count, offset: page * count, selection
+        page, size, selection
     });
 
     const url = new URL(request.url);
 
-    return json({count, page, selection, results, url: url.pathname+url.search});
+    return json({size, page, selection, results, url: url.pathname+url.search});
 }
 
 export const meta: MetaFunction = ({data}) => {
@@ -58,7 +58,7 @@ export const meta: MetaFunction = ({data}) => {
 };
 
 export default function EditorProblemsIndex() {
-    const {count, page, selection, results, url} = useLoaderData();
+    const {size, page, selection, results, url} = useLoaderData();
 
     return <Container maxW={'5xl'}>
         <Heading
