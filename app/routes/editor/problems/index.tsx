@@ -1,8 +1,8 @@
-import type {ActionFunction, LoaderFunction, MetaFunction} from "@remix-run/cloudflare";
+import type {LoaderFunction, MetaFunction} from "@remix-run/cloudflare";
 import tokenCheck from "~/services/token-check";
-import {useLoaderData, Link as RemixLink, useSubmit} from "@remix-run/react";
+import {useLoaderData} from "@remix-run/react";
 import {json} from "@remix-run/cloudflare";
-import {request as gqlreq} from '@ninetailed/cf-worker-graphql-request'
+import {GraphQLClient} from '@ninetailed/cf-worker-graphql-request'
 import {
     Heading,
     Container,
@@ -41,7 +41,8 @@ export const loader: LoaderFunction = async ({request}) => {
         headers['Authorization'] = `Bearer ${user?._token.accessToken}`;
     }
 
-    const results = await gqlreq('https://coreapi-sf.pkasila.net/graphql', query, {
+    const client = new GraphQLClient('https://coreapi-sf.pkasila.net/graphql', { headers });
+    const results = await client.request(query, {
         page, size, selection
     });
 
