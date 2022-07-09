@@ -212,7 +212,7 @@ export default function EditorProblem() {
 
     const hasChanges: boolean = problem !== results.problem.problem ||
                                 type !== results.problem.type ||
-                                tags !== results.problem.tags ||
+                                JSON.stringify(tags.map(t => t.id).sort()) !== JSON.stringify(results.problem.tags?.map(t => t.id).sort() ?? []) ||
                                 solution !== (results.problem.solution ?? '') ||
                                 hasSolution !== (results.problem.solution !== null && results.problem.solution !== '');
 
