@@ -9,13 +9,13 @@ import {
     useColorModeValue,
     useDisclosure
 } from "@chakra-ui/react";
-import {FiMenu, FiSearch, MdHome, MdKeyboardArrowRight, RiAdminFill} from "react-icons/all";
-import {ReactNode} from "react";
+import {FiMenu, FiSearch, MdKeyboardArrowRight, RiAdminFill} from "react-icons/all";
+import type {ReactNode} from "react";
 import {MoonIcon, SunIcon} from "@chakra-ui/icons";
 import {NavLink as RemixLink} from "@remix-run/react";
 import {IoListSharp} from "react-icons/io5";
 import AuthButtons from "../auth-buttons";
-import User from "~/services/user";
+import type User from "~/services/user";
 
 export default function ContentLayout({children, user}: { children: ReactNode, user?: User }) {
     const sidebar = useDisclosure();
@@ -113,6 +113,7 @@ export default function ContentLayout({children, user}: { children: ReactNode, u
         >
             <Flex px="4" py="5" align="center">
                 <Text
+                    as={RemixLink} to={'/'}
                     fontSize="2xl"
                     ml="2"
                     color="brand.500"
@@ -131,7 +132,6 @@ export default function ContentLayout({children, user}: { children: ReactNode, u
                 color="gray.600"
                 aria-label="Main Navigation"
             >
-                <NavItem icon={MdHome} as={RemixLink} to={'/'}>Home</NavItem>
                 <NavItem icon={IoListSharp} as={RemixLink} to={'/problems'}>Problems</NavItem>
                 <EditorNavItems></EditorNavItems>
             </Flex>
