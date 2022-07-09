@@ -256,7 +256,7 @@ export default function EditorProblem() {
                 </SectionCard>
 
                 <SectionCard title={'Problem'}>
-                    <ReactKatex strict={false} children={problem}></ReactKatex>
+                    <ReactKatex breakLine={true} strict={false} children={problem}></ReactKatex>
                     <Textarea
                         mt={3}
                         value={problem}
@@ -267,7 +267,7 @@ export default function EditorProblem() {
 
                 {
                     hasSolution ? <SectionCard title={'Solution'}>
-                        <ReactKatex strict={false} children={solution}></ReactKatex>
+                        <ReactKatex breakLine={true} strict={false} children={solution}></ReactKatex>
                         <Textarea
                             mt={3}
                             value={solution}

@@ -84,12 +84,12 @@ export default function ProblemView() {
 
             <Stack spacing={4}>
                 <SectionCard title={'Problem'}>
-                    <ReactKatex strict={false} children={problem.problem}></ReactKatex>
+                    <ReactKatex breakLine={true} strict={false} children={problem.problem}></ReactKatex>
                 </SectionCard>
 
                 {
                     problem.solution != null ? <SectionCard title={'Solution'}>
-                        <ReactKatex strict={'ignore'} children={problem.solution}></ReactKatex>
+                        <ReactKatex breakLine={true} strict={'ignore'} children={problem.solution}></ReactKatex>
                     </SectionCard> : null
                 }
 
