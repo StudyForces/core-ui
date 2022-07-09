@@ -13,7 +13,8 @@ import {
     Radio, RadioGroup,
     SimpleGrid,
     Skeleton,
-    Stack, Tag,
+    Stack,
+    Tag as ChakraTag,
     Textarea,
     useColorModeValue
 } from "@chakra-ui/react";
@@ -21,6 +22,7 @@ import ReactKatex from "@pkasila/react-katex";
 import {useLoaderData, useSubmit, useTransition} from "@remix-run/react";
 import { ClientOnly } from "remix-utils";
 import type Problem from "~/types/problem";
+import type Tag from "~/types/problem";
 import {Fragment, useState} from "react";
 import SectionCard from "~/components/problems/section-card";
 import ProblemType from "~/types/problem-type";
@@ -118,6 +120,14 @@ export const loader: LoaderFunction = async ({request, params}) => {
             title
         }
     }
+    tags {
+        id
+        color
+        title
+        parent {
+            id
+        }
+    }
 }`
 
     const headers: any = {};
@@ -146,7 +156,7 @@ export const meta: MetaFunction = ({data}) => {
 export default function EditorProblem() {
     const badgeVariant = useColorModeValue('solid', 'outline');
 
-    const {results, url} = useLoaderData() as {results: {problem: Problem}, url: string};
+    const {results, url} = useLoaderData() as {results: {problem: Problem, tags: Tag[]}, url: string};
     const [type, setType] = useState(results.problem.type);
     const [tags, setTags] = useState(results.problem.tags ?? []);
     const [problem, setProblem] = useState(results.problem.problem);
@@ -288,15 +298,15 @@ export default function EditorProblem() {
                 <SectionCard title={'Tags'}>
                     {
                         tags.map(tag => <Fragment key={tag.id}>
-                            <Tag colorScheme={tag.color} variant={badgeVariant} size={'lg'}>
+                            <ChakraTag colorScheme={tag.color} variant={badgeVariant} size={'lg'}>
                                 {tag.title}
-                            </Tag>
+                            </ChakraTag>
                             {' '}
                         </Fragment>)
                     }
                     <Box height={'200px'} style={{overflowY: 'scroll'}} mt={4}>
                         <ClientOnly fallback={<Skeleton height='200px' />}
-                                    children={() => <TagsSelector tags={tags}
+                                    children={() => <TagsSelector tags={results.tags} selected={tags}
                                                                   onChange={tags => setTags(tags)}></TagsSelector>} />
                     </Box>
                 </SectionCard>
