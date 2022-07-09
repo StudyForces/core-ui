@@ -16,7 +16,8 @@ import {
     Stack,
     Tag as ChakraTag,
     Textarea,
-    useColorModeValue
+    useColorModeValue,
+    Wrap, WrapItem
 } from "@chakra-ui/react";
 import ReactKatex from "@pkasila/react-katex";
 import {useLoaderData, useSubmit, useTransition} from "@remix-run/react";
@@ -296,14 +297,16 @@ export default function EditorProblem() {
                 }
 
                 <SectionCard title={'Tags'}>
-                    {
-                        tags.map(tag => <Fragment key={tag.id}>
-                            <ChakraTag colorScheme={tag.color} variant={badgeVariant} size={'lg'}>
-                                {tag.title}
-                            </ChakraTag>
-                            {' '}
-                        </Fragment>)
-                    }
+                    <Wrap spacing={1}>
+                        {
+                            tags.map(tag => <WrapItem key={tag.id}>
+                                <ChakraTag colorScheme={tag.color} variant={badgeVariant} size={'lg'}>
+                                    {tag.title}
+                                </ChakraTag>
+                                {' '}
+                            </WrapItem>)
+                        }
+                    </Wrap>
                     <Box height={'200px'} style={{overflowY: 'scroll'}} mt={4}>
                         <ClientOnly fallback={<Skeleton height='200px' />}
                                     children={() => <TagsSelector tags={results.tags} selected={tags}

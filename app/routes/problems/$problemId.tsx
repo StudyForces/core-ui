@@ -2,11 +2,10 @@ import type {LoaderFunction, MetaFunction} from "@remix-run/cloudflare";
 import {useLoaderData} from "@remix-run/react";
 import {json} from "@remix-run/cloudflare";
 import {request as gqlreq} from '@ninetailed/cf-worker-graphql-request'
-import {Heading, Container, chakra, Stack, useColorModeValue, Image, Box, SimpleGrid, Tag} from "@chakra-ui/react";
+import {Heading, Container, chakra, Stack, useColorModeValue, Image, Box, SimpleGrid, Tag, Wrap, WrapItem} from "@chakra-ui/react";
 import type Problem from "~/types/problem";
 import SectionCard from "~/components/problems/section-card";
 import ReactKatex from "@pkasila/react-katex";
-import {Fragment} from "react";
 
 export const loader: LoaderFunction = async ({request, params}) => {
     const query = `query ProblemView($id: ID!) {
@@ -64,22 +63,24 @@ export default function ProblemView() {
                 </chakra.span>
             </Heading>
 
-            <Stack my={4} direction={'row'} spacing={1} fontSize={'sm'} aria-hidden={true}>
+            <Wrap my={4} spacing={1} fontSize={'sm'} aria-hidden={true}>
                 {
-                    !problem.published ? <Tag colorScheme='red' variant={badgeVariant} size={'lg'}>
-                        Private
-                    </Tag> : null
+                    !problem.published ? <WrapItem>
+                        <Tag colorScheme='red' variant={badgeVariant} size={'lg'}>
+                            Private
+                        </Tag>
+                    </WrapItem> : null
                 }
                 {' '}
                 {
-                    problem.tags?.map(tag => <Fragment key={tag.id}>
+                    problem.tags?.map(tag => <WrapItem key={tag.id}>
                         <Tag colorScheme={tag.color} variant={badgeVariant} size={'lg'}>
                             {tag.title}
                         </Tag>
                         {' '}
-                    </Fragment>)
+                    </WrapItem>)
                 }
-            </Stack>
+            </Wrap>
 
             <Stack spacing={4}>
                 <SectionCard title={'Problem'}>

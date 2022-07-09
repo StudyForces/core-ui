@@ -48,16 +48,16 @@ export default function ProblemCard({problem}: {problem: Problem}) {
 
                 <Stack pt={6} direction={'row'} spacing={4} align={'center'}
                        justify={'flex-end'} flex={0}>
-                    <Stack direction={'row'} spacing={1} fontSize={'sm'}>
+                    <Text noOfLines={1}>
                         {
                             problem.tags?.slice(0, 2).map(tag => <Fragment key={tag.id}>
-                                <Tag colorScheme={tag.color} variant={badgeVariant}>
+                                <Tag colorScheme={tag.color} variant={badgeVariant} size={'sm'}>
                                     {tag.title}
                                 </Tag>
                                 {' '}
                             </Fragment>)
                         }
-                    </Stack>
+                    </Text>
 
                     <Spacer />
 
