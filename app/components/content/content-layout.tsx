@@ -171,6 +171,7 @@ export default function ContentLayout({children, user}: { children: ReactNode, u
                 transition=".3s ease"
             >
                 <Flex
+                    zIndex={1}
                     as="header"
                     align="center"
                     justify="space-between"
