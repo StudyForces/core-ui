@@ -6,12 +6,12 @@ import {
     useColorModeValue, Button, Spacer, Flex, Icon, Tag
 } from '@chakra-ui/react';
 import {Link as RemixLink} from '@remix-run/react';
-import { FaArrowRight } from 'react-icons/fa';
+import {FaArrowRight} from 'react-icons/fa';
 import type Problem from "~/types/problem";
 import ReactKatex from "@pkasila/react-katex";
-import { Fragment } from 'react';
+import {Fragment} from 'react';
 
-export default function ProblemCard({problem}: {problem: Problem}) {
+export default function ProblemCard({problem}: { problem: Problem }) {
     const badgeVariant = useColorModeValue('solid', 'outline');
 
     return (
@@ -48,18 +48,18 @@ export default function ProblemCard({problem}: {problem: Problem}) {
 
                 <Stack pt={6} direction={'row'} spacing={4} align={'center'}
                        justify={'flex-end'} flex={0}>
-                    <Text noOfLines={1}>
+                    <Box noOfLines={1}>
                         {
                             problem.tags?.slice(0, 2).map(tag => <Fragment key={tag.id}>
-                                <Tag colorScheme={tag.color} variant={badgeVariant} size={'sm'}>
+                                <Tag colorScheme={tag.color} variant={badgeVariant}>
                                     {tag.title}
                                 </Tag>
                                 {' '}
                             </Fragment>)
                         }
-                    </Text>
+                    </Box>
 
-                    <Spacer />
+                    <Spacer/>
 
                     <Button variant={'link'}
                             as={RemixLink}

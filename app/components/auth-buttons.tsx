@@ -1,28 +1,42 @@
 import type User from "~/services/user";
-import {Button, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Text, useColorModeValue} from "@chakra-ui/react";
+import {Button, Menu, MenuButton, MenuDivider, MenuItem, MenuList, useColorModeValue} from "@chakra-ui/react";
 import {Link as RemixLink} from "@remix-run/react/dist/components";
+import {useSubmit, useTransition} from "@remix-run/react";
 
 function NotAuthorized() {
+    const submit = useSubmit();
+    const transition = useTransition();
+
+    const signIn = () => {
+        submit(null, { method: "post", action: `/auth/keycloak` });
+    }
+
+    const signUp = () => {
+        submit(null, { method: "post", action: `/auth/keycloak-reg` });
+    }
+
     return <>
         <Button
-            as={RemixLink}
             fontSize={'sm'}
             fontWeight={400}
             variant={'link'}
-            to={'/login'}>
+            disabled={transition.state !== 'idle'}
+            isLoading={transition.state !== 'idle'}
+            onClick={signIn}>
             Sign In
         </Button>
         <Button
-            as={'a'}
             display={{base: 'none', md: 'inline-flex'}}
             fontSize={'sm'}
             fontWeight={600}
             color={'white'}
             bg={'brand.400'}
-            href={'#'}
             _hover={{
                 bg: useColorModeValue('brand.500', 'brand.300'),
-            }}>
+            }}
+            disabled={transition.state !== 'idle'}
+            isLoading={transition.state !== 'idle'}
+            onClick={signUp}>
             Sign Up
         </Button>
     </>;

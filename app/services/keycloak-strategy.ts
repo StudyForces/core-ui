@@ -10,6 +10,7 @@ export interface KeycloakStrategyOptions {
     clientSecret: string;
     callbackURL: string;
     scope?: string;
+    registration?: boolean;
 }
 
 export interface KeycloakProfile extends OAuth2Profile {
@@ -73,7 +74,7 @@ export class KeycloakStrategy<User> extends OAuth2Strategy<User,
         // using our strategy
         super(
             {
-                authorizationURL: `https://${options.domain}/auth/realms/${options.realm}/protocol/openid-connect/auth`,
+                authorizationURL: `https://${options.domain}/auth/realms/${options.realm}/protocol/openid-connect/${options?.registration ? 'registrations' : 'auth'}`,
                 tokenURL: `https://${options.domain}/auth/realms/${options.realm}/protocol/openid-connect/token`,
                 clientID: options.clientID,
                 clientSecret: options.clientSecret,

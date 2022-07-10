@@ -2007,10 +2007,10 @@
   "resolved" "https://registry.npmjs.org/@pkasila/graphql-request-fetch/-/graphql-request-fetch-1.0.0.tgz"
   "version" "1.0.0"
 
-"@pkasila/react-katex@^1.2.1":
-  "integrity" "sha512-xd/OGhXeH94mcjcEf/c3m88etnkA7UBPEcY2r+oGkyt5r8HXZKfDzSeDv5IAsct8U+2JiUUYlsbefxc6olpNeA=="
-  "resolved" "https://registry.npmjs.org/@pkasila/react-katex/-/react-katex-1.2.1.tgz"
-  "version" "1.2.1"
+"@pkasila/react-katex@^1.2.2":
+  "integrity" "sha512-YdYbi0WiHWo9qUd/MZHfj7vUon0OpBva6MK4o/UAXS9bjGi4rwMJf7ifl93/p+51v0cuoHhf7gP5rmSNEPQVtw=="
+  "resolved" "https://registry.npmjs.org/@pkasila/react-katex/-/react-katex-1.2.2.tgz"
+  "version" "1.2.2"
   dependencies:
     "katex" "^0.16.0"
     "prop-types" "^15.8.1"

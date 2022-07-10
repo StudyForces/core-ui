@@ -19,8 +19,8 @@ export default function SectionCard({children, title}: {children: ReactNode, tit
             </Heading> : null
         }
 
-        <Text color={useColorModeValue('gray.700', 'gray.200')} fontSize={'xl'}>
+        <Box color={useColorModeValue('gray.700', 'gray.200')} fontSize={'xl'}>
             {children}
-        </Text>
+        </Box>
     </Box>;
 }

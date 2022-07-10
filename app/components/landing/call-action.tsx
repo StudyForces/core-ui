@@ -1,8 +1,15 @@
-import {Box, chakra, Flex, Stack, Image, Link, useColorModeValue} from "@chakra-ui/react";
-import {Link as RemixLink} from '@remix-run/react';
+import {Box, chakra, Flex, Stack, Image, Link, useColorModeValue, Spinner} from "@chakra-ui/react";
+import {Link as RemixLink, useSubmit, useTransition} from '@remix-run/react';
 import type User from "~/services/user";
 
-export default function CallAction({user}: {user?: User}) {
+export default function CallAction({user}: { user?: User }) {
+    const submit = useSubmit();
+    const transition = useTransition();
+
+    const signUp = () => {
+        submit(null, {method: "post", action: `/auth/keycloak-reg`});
+    }
+
     return <Flex
         direction={{
             base: "column",
@@ -97,12 +104,11 @@ export default function CallAction({user}: {user?: User}) {
                                 bg: "brand.600",
                             },
                         }}
-                        as={RemixLink}
-                        to={'/problems'}
+                        as={user ? RemixLink : 'button'}
+                        to={user ? '/problems' : undefined}
+                        onClick={!(user || transition.state !== 'idle') ? signUp : undefined}
                     >
-                        {
-                            user ? 'Search for problems' : 'Sign up for free'
-                        }
+                        { user ? 'Search for problems' : 'Sign up for free' }
                     </Link>
                 </Box>
             </Stack>

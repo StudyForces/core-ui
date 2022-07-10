@@ -17,6 +17,7 @@ export const loader: LoaderFunction = async ({request}) => {
         type
         problem
         tags {
+            id
             color
             title
         }

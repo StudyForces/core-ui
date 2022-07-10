@@ -3,16 +3,19 @@ import {sessionStorage} from "~/services/session.server";
 import type User from "~/services/user";
 import {KeycloakStrategy} from "~/services/keycloak-strategy";
 
-let authenticator = new Authenticator<User>(sessionStorage);
+let authenticator = new Authenticator<User>(sessionStorage, {
+    sessionKey: 'user'
+});
 
-authenticator.use(
-    new KeycloakStrategy(
+function createKeycloak(registration: boolean = false) {
+    return new KeycloakStrategy(
         {
             domain: 'keycloak.pkasila.net',
             realm: 'StudyForces',
             clientID: CLIENT_ID ?? 'core',
             clientSecret: CLIENT_SECRET ?? '',
-            callbackURL: `${KC_CB_BASE ?? 'https://coreui-sf.pkasila.net'}/auth/keycloak/callback`,
+            callbackURL: `${KC_CB_BASE ?? 'https://coreui-sf.pkasila.net'}/auth/keycloak${registration ? '-reg': ''}/callback`,
+            registration
         },
         async ({accessToken, refreshToken, extraParams, profile, context}) => {
             // here you can use the params above to get the user and return it
@@ -36,8 +39,17 @@ authenticator.use(
 
             return user;
         }
-    ),
+    )
+}
+
+authenticator.use(
+    createKeycloak(false),
     "sf-keycloak"
+);
+
+authenticator.use(
+    createKeycloak(true),
+    "sf-keycloak-reg"
 );
 
 export default authenticator;
