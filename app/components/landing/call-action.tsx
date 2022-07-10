@@ -1,4 +1,4 @@
-import {Box, chakra, Flex, Stack, Image, Link, useColorModeValue, Spinner} from "@chakra-ui/react";
+import {Box, chakra, Flex, Stack, Image, Link, useColorModeValue} from "@chakra-ui/react";
 import {Link as RemixLink, useSubmit, useTransition} from '@remix-run/react';
 import type User from "~/services/user";
 
@@ -108,7 +108,7 @@ export default function CallAction({user}: { user?: User }) {
                         to={user ? '/problems' : undefined}
                         onClick={!(user || transition.state !== 'idle') ? signUp : undefined}
                     >
-                        { user ? 'Search for problems' : 'Sign up for free' }
+                        { user ? 'Problems' : 'Sign up for free' }
                     </Link>
                 </Box>
             </Stack>

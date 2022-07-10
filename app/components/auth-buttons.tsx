@@ -8,11 +8,11 @@ function NotAuthorized() {
     const transition = useTransition();
 
     const signIn = () => {
-        submit(null, { method: "post", action: `/auth/keycloak` });
+        submit(null, {method: "post", action: `/auth/keycloak`});
     }
 
     const signUp = () => {
-        submit(null, { method: "post", action: `/auth/keycloak-reg` });
+        submit(null, {method: "post", action: `/auth/keycloak-reg`});
     }
 
     return <>
@@ -22,7 +22,7 @@ function NotAuthorized() {
             variant={'link'}
             disabled={transition.state !== 'idle'}
             isLoading={transition.state !== 'idle'}
-            onClick={signIn}>
+            onClick={transition.state === 'idle' ? signIn : undefined}>
             Sign In
         </Button>
         <Button
@@ -36,13 +36,13 @@ function NotAuthorized() {
             }}
             disabled={transition.state !== 'idle'}
             isLoading={transition.state !== 'idle'}
-            onClick={signUp}>
+            onClick={transition.state === 'idle' ? signUp : undefined}>
             Sign Up
         </Button>
     </>;
 }
 
-function Authorized({user}: {user: User}) {
+function Authorized({user}: { user: User }) {
     return <Menu>
         <MenuButton
             as={Button}
@@ -54,12 +54,12 @@ function Authorized({user}: {user: User}) {
         </MenuButton>
         <MenuList>
             <MenuItem>Something</MenuItem>
-            <MenuDivider />
+            <MenuDivider/>
             <MenuItem as={RemixLink} to={'/logout'}>Logout</MenuItem>
         </MenuList>
     </Menu>;
 }
 
-export default function AuthButtons({user}: {user?: User}) {
-    return user === undefined || user === null ? <NotAuthorized /> : <Authorized user={user} />
+export default function AuthButtons({user}: { user?: User }) {
+    return user === undefined || user === null ? <NotAuthorized/> : <Authorized user={user}/>
 }

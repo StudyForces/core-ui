@@ -12,8 +12,6 @@ export default function FeaturesIndex() {
             <Container
                 display={'flex'}
                 maxW={'5xl'}
-                justifyContent="center"
-                alignItems="center"
             >
                 <Outlet></Outlet>
             </Container>

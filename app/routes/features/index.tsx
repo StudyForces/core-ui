@@ -1,11 +1,13 @@
-import {Box, Flex, chakra, SimpleGrid} from "@chakra-ui/react";
+import {Box, Flex, Heading, Text, SimpleGrid} from "@chakra-ui/react";
 import type {ReactNode} from "react";
-import {IoPeopleSharp} from "react-icons/io5";
+import {IoListSharp} from "react-icons/io5";
 
 export default function FeaturesIndex() {
-    const Feature = (props: {color: string, title: string, icon: ReactNode, children: ReactNode}) => {
+    const Feature = (props: { color: string, title: string, icon: ReactNode, children: ReactNode }) => {
         return (
-            <Box>
+            <Flex direction={'column'}
+                  alignItems={{base: 'start', lg: 'center'}}
+                  justifyContent={{base: 'start', lg: 'center'}}>
                 <Flex
                     alignItems="center"
                     justifyContent="center"
@@ -22,8 +24,9 @@ export default function FeaturesIndex() {
                 >
                     {props.icon}
                 </Flex>
-                <chakra.h3
+                <Heading
                     mb={2}
+                    fontSize={'md'}
                     fontWeight="semibold"
                     lineHeight="shorter"
                     _light={{
@@ -31,37 +34,29 @@ export default function FeaturesIndex() {
                     }}
                 >
                     {props.title}
-                </chakra.h3>
-                <chakra.p
+                </Heading>
+                <Text
                     fontSize="sm"
                     color="gray.500"
                     _dark={{
                         color: "gray.400",
                     }}
+                    textAlign={{base: 'start', lg: 'center'}}
                 >
                     {props.children}
-                </chakra.p>
-            </Box>
+                </Text>
+            </Flex>
         );
     };
 
     return (
-        <Box
-            px={8}
-            pt={{base: 8, md: 20}}
-            pb={20}
-            mx="auto"
-            bg="white"
-            _dark={{
-                bg: "gray.800",
-            }}
-        >
+        <Box mt={{base: 6, lg: 10}} w={'full'}>
             <Box
                 textAlign={{
                     lg: "center",
                 }}
             >
-                <chakra.p
+                <Heading
                     mt={2}
                     fontSize={{
                         base: "3xl",
@@ -75,8 +70,8 @@ export default function FeaturesIndex() {
                     }}
                 >
                     Features
-                </chakra.p>
-                <chakra.p
+                </Heading>
+                <Text
                     mt={4}
                     maxW="2xl"
                     fontSize="xl"
@@ -89,9 +84,10 @@ export default function FeaturesIndex() {
                     }}
                 >
                     Get inside of what makes us better.
-                </chakra.p>
+                </Text>
             </Box>
             <SimpleGrid
+                px={{base: 0, lg: 4}}
                 columns={{
                     base: 1,
                     sm: 2,
@@ -106,11 +102,11 @@ export default function FeaturesIndex() {
                 mt={6}
             >
                 <Feature
-                    color="red"
-                    title="Whoops!"
-                    icon={<IoPeopleSharp />}
+                    color="brand"
+                    title="Collection"
+                    icon={<IoListSharp/>}
                 >
-                    It needs to be added
+                    An enormous catalog of 9000 problems
                 </Feature>
             </SimpleGrid>
         </Box>

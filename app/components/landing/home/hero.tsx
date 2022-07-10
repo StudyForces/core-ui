@@ -1,7 +1,27 @@
-import {Button, Container, Flex, Heading, Icon, IconProps, Stack, Text, useColorModeValue, Link} from "@chakra-ui/react";
-import { Link as RemixLink } from "@remix-run/react";
+import {
+    Button,
+    Container,
+    Flex,
+    Heading,
+    Icon,
+    Stack,
+    Text,
+    useColorModeValue
+} from "@chakra-ui/react";
+import type {IconProps} from "@chakra-ui/react";
+import {Link as RemixLink, useSubmit, useTransition} from "@remix-run/react";
+import User from "~/services/user";
 
-export default function Hero() {
+export default function Hero({user}: { user?: User }) {
+    const submit = useSubmit();
+    const transition = useTransition();
+
+    const signUp = () => {
+        submit(null, {method: "post", action: `/auth/keycloak-reg`});
+    }
+
+    const hoverButtonBackground = useColorModeValue('brand.500', 'brand.300');
+
     return <Container maxW={'5xl'}>
         <Stack
             textAlign={'center'}
@@ -20,19 +40,34 @@ export default function Hero() {
                 </Text>
             </Heading>
             <Text color={'gray.500'} maxW={'3xl'}>
-                Enormous catalog of problem in Physics, Maths and other subjects. Q&A section to get support
-                    from the StudyForces community. And so much more...
+                Enormous catalog of problems in Physics, Maths and other subjects. Q&A section to get support
+                from the StudyForces community. And so much more...
             </Text>
             <Stack spacing={6} direction={'row'}>
-                <Button
-                    rounded={'full'}
-                    px={6}
-                    colorScheme={'brand'}
-                    color={'brand.50'}
-                    bg={'brand.400'}
-                    _hover={{bg: useColorModeValue('brand.500', 'brand.300')}}>
-                    Get started
-                </Button>
+                {
+                    !user ? <Button
+                        rounded={'full'}
+                        px={6}
+                        colorScheme={'brand'}
+                        color={'brand.50'}
+                        bg={'brand.400'}
+                        disabled={transition.state !== 'idle'}
+                        isLoading={transition.state !== 'idle'}
+                        onClick={transition.state === 'idle' ? signUp : undefined}
+                        _hover={{bg: hoverButtonBackground}}>
+                        Get started
+                    </Button> : <Button
+                        as={RemixLink}
+                        to={'/problems'}
+                        rounded={'full'}
+                        px={6}
+                        colorScheme={'brand'}
+                        color={'brand.50'}
+                        bg={'brand.400'}
+                        _hover={{bg: hoverButtonBackground}}>
+                        Problems
+                    </Button>
+                }
                 <Button as={RemixLink} rounded={'full'} px={6} to={'/features'}>
                     Learn more
                 </Button>

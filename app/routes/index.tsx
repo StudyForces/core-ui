@@ -11,7 +11,7 @@ export default function Index() {
     const {user} = useLoaderData();
 
     return <LandingLayout user={user}>
-        <Hero></Hero>
+        <Hero user={user}></Hero>
         <EnormousCatalog></EnormousCatalog>
         <Qna></Qna>
     </LandingLayout>;
