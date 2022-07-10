@@ -1958,11 +1958,6 @@
     "undici" "5.5.1"
     "ws" "^8.2.2"
 
-"@ninetailed/cf-worker-graphql-request@^1.2.0":
-  "integrity" "sha512-Y0z6WQAspiH+86UIka0H3ZMCFQD7NL2J6XmpntIakvjJ2zc24eOdtZbkcViWq7cUxlDEO0GsW20diDHNLcFDKQ=="
-  "resolved" "https://registry.npmjs.org/@ninetailed/cf-worker-graphql-request/-/cf-worker-graphql-request-1.2.0.tgz"
-  "version" "1.2.0"
-
 "@nodelib/fs.scandir@2.1.5":
   "integrity" "sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g=="
   "resolved" "https://registry.npmjs.org/@nodelib/fs.scandir/-/fs.scandir-2.1.5.tgz"
@@ -2006,6 +2001,11 @@
   "version" "2.0.0"
   dependencies:
     "json-parse-even-better-errors" "^2.3.1"
+
+"@pkasila/graphql-request-fetch@^1.0.0":
+  "integrity" "sha512-+PslgJSwhJYqFz14psLLBS9p11K4abpr7u/v0EvfJfOjH+64MHVaShR/oTAgiPVLMktCVsarGtrJAl1p8m9oYA=="
+  "resolved" "https://registry.npmjs.org/@pkasila/graphql-request-fetch/-/graphql-request-fetch-1.0.0.tgz"
+  "version" "1.0.0"
 
 "@pkasila/react-katex@^1.2.1":
   "integrity" "sha512-xd/OGhXeH94mcjcEf/c3m88etnkA7UBPEcY2r+oGkyt5r8HXZKfDzSeDv5IAsct8U+2JiUUYlsbefxc6olpNeA=="

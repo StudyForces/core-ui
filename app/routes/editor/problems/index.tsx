@@ -2,7 +2,7 @@ import type {LoaderFunction, MetaFunction} from "@remix-run/cloudflare";
 import tokenCheck from "~/services/token-check";
 import {useLoaderData} from "@remix-run/react";
 import {json} from "@remix-run/cloudflare";
-import {GraphQLClient} from '@ninetailed/cf-worker-graphql-request'
+import {GraphQLClient} from '@pkasila/graphql-request-fetch';
 import {
     Heading,
     Container,

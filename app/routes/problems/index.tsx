@@ -1,7 +1,7 @@
 import type {LoaderFunction, MetaFunction} from "@remix-run/cloudflare";
 import {useLoaderData} from "@remix-run/react";
 import {json} from "@remix-run/cloudflare";
-import {request as gqlreq} from '@ninetailed/cf-worker-graphql-request'
+import {GraphQLClient} from '@pkasila/graphql-request-fetch';
 import {Heading, SimpleGrid, Container} from "@chakra-ui/react";
 import ProblemCard from "~/components/problems/problem-card";
 import type Problem from "~/types/problem";
@@ -23,8 +23,13 @@ export const loader: LoaderFunction = async ({request}) => {
     }
 }`
 
-    const results = await gqlreq('https://coreapi-sf.pkasila.net/graphql', query, {
+    const client = new GraphQLClient('https://coreapi-sf.pkasila.net/graphql');
+    const results = await client.request(query,{
         page, size
+    }, {
+        cache: true,
+        cacheKey: request.url,
+        cacheTtl: 300,
     });
 
     return json({size, page, results});

@@ -1,7 +1,7 @@
 import type {LoaderFunction, MetaFunction} from "@remix-run/cloudflare";
 import {useLoaderData} from "@remix-run/react";
 import {json} from "@remix-run/cloudflare";
-import {request as gqlreq} from '@ninetailed/cf-worker-graphql-request'
+import {GraphQLClient} from '@pkasila/graphql-request-fetch';
 import {Heading, Container, chakra, Stack, useColorModeValue, Image, Box, SimpleGrid, Tag, Wrap, WrapItem} from "@chakra-ui/react";
 import type Problem from "~/types/problem";
 import SectionCard from "~/components/problems/section-card";
@@ -27,9 +27,13 @@ export const loader: LoaderFunction = async ({request, params}) => {
         }
     }
 }`
-
-    const results = await gqlreq('https://coreapi-sf.pkasila.net/graphql', query,{
+    const client = new GraphQLClient('https://coreapi-sf.pkasila.net/graphql');
+    const results = await client.request(query,{
         id: params.problemId
+    }, {
+        cache: true,
+        cacheKey: request.url,
+        cacheTtl: 300,
     });
 
     return json(results);
