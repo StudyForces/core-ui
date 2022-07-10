@@ -106,10 +106,12 @@ export default function ProblemView() {
                             }}
                             spacing={4}>
                             {
-                                problem.attachments.map(attachment => <Box key={attachment.fileName}>
+                                problem.attachments.map((attachment, idx) => <Box key={attachment.fileName}>
                                     <Image w="full"
+                                           loading={'lazy'}
                                            rounded="lg"
-                                           src={attachment.url}></Image>
+                                           src={attachment.url}
+                                           alt={`Attachment #${idx+1}`}></Image>
                                 </Box>)
                             }
                         </SimpleGrid>

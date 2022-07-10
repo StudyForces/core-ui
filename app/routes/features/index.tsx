@@ -1,6 +1,14 @@
 import {Box, Flex, Heading, Text, SimpleGrid} from "@chakra-ui/react";
 import type {ReactNode} from "react";
 import {IoListSharp} from "react-icons/io5";
+import {MetaFunction} from "@remix-run/cloudflare";
+
+export const meta: MetaFunction = () => {
+    return {
+        title: 'Features',
+        description: 'Get inside of what makes us better.',
+    };
+};
 
 export default function FeaturesIndex() {
     const Feature = (props: { color: string, title: string, icon: ReactNode, children: ReactNode }) => {

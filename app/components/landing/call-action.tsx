@@ -122,6 +122,7 @@ export default function CallAction({user}: { user?: User }) {
             textAlign="center"
         >
             <Image
+                loading="lazy"
                 w="full"
                 rounded="lg"
                 shadow="2xl"

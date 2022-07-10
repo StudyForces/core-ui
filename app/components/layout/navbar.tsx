@@ -76,7 +76,7 @@ export default function Navbar({user}: { user?: User }) {
                         justify={'flex-end'}
                         direction={'row'}
                         spacing={4}>
-                        <Button display={{base: 'none', md: 'flex'}} onClick={toggleColorMode} variant={'link'}>
+                        <Button display={{base: 'none', md: 'flex'}} onClick={toggleColorMode} variant={'link'} aria-label={'Change color mode'}>
                             {colorMode === 'light' ? <MoonIcon/> : <SunIcon/>}
                         </Button>
                         <AuthButtons user={user}></AuthButtons>

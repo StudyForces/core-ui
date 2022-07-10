@@ -69,7 +69,7 @@ export default function Hero({user}: { user?: User }) {
                     </Button>
                 }
                 <Button as={RemixLink} rounded={'full'} px={6} to={'/features'}>
-                    Learn more
+                    Features
                 </Button>
             </Stack>
             <Flex w={'full'}>
