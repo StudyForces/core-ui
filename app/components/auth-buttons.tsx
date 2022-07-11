@@ -1,5 +1,14 @@
 import type User from "~/services/user";
-import {Button, Menu, MenuButton, MenuDivider, MenuItem, MenuList, useColorModeValue} from "@chakra-ui/react";
+import {
+    Button,
+    Menu,
+    MenuButton,
+    MenuDivider,
+    MenuGroup,
+    MenuItem,
+    MenuList,
+    useColorModeValue
+} from "@chakra-ui/react";
 import {Link as RemixLink} from "@remix-run/react/dist/components";
 import {useSubmit, useTransition} from "@remix-run/react";
 
@@ -52,8 +61,12 @@ function Authorized({user}: { user: User }) {
             minW={0} translate={'no'}>
             {user.displayName}
         </MenuButton>
-        <MenuList>
-            <MenuItem>Something</MenuItem>
+        <MenuList pt={0} fontSize={'sm'}>
+            <MenuGroup title={'My Account'}>
+                <MenuItem as={'a'} href={'https://keycloak.pkasila.net/auth/realms/StudyForces/account'}>
+                    Profile
+                </MenuItem>
+            </MenuGroup>
             <MenuDivider/>
             <MenuItem as={RemixLink} to={'/logout'}>Logout</MenuItem>
         </MenuList>
