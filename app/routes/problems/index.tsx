@@ -31,6 +31,8 @@ export const loader: LoaderFunction = async ({request}) => {
         cache: true,
         cacheKey: request.url,
         cacheTtl: 300,
+        cacheType: 'public',
+        cacheOverride: true
     });
 
     return json({size, page, results});

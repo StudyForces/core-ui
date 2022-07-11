@@ -17,7 +17,7 @@
     "@emotion/react": "^11",
     "@emotion/server": "^11",
     "@emotion/styled": "^11",
-    "@pkasila/graphql-request-fetch": "^1.0.0",
+    "@pkasila/graphql-request-fetch": "^1.0.1",
     "@pkasila/react-katex": "^1.2.2",
     "@remix-run/cloudflare": "^1.6.3",
     "@remix-run/cloudflare-workers": "^1.6.3",

@@ -2002,10 +2002,10 @@
   dependencies:
     "json-parse-even-better-errors" "^2.3.1"
 
-"@pkasila/graphql-request-fetch@^1.0.0":
-  "integrity" "sha512-+PslgJSwhJYqFz14psLLBS9p11K4abpr7u/v0EvfJfOjH+64MHVaShR/oTAgiPVLMktCVsarGtrJAl1p8m9oYA=="
-  "resolved" "https://registry.npmjs.org/@pkasila/graphql-request-fetch/-/graphql-request-fetch-1.0.0.tgz"
-  "version" "1.0.0"
+"@pkasila/graphql-request-fetch@^1.0.1":
+  "integrity" "sha512-aMMz2Z/KX3pC2onMm8nnh3YyJd2D6YyxGXOBcIIpkDNKcKkPcOTuWYesE4QFx+tpXA74IPdUEiWmwIxi539CEA=="
+  "resolved" "https://registry.npmjs.org/@pkasila/graphql-request-fetch/-/graphql-request-fetch-1.0.1.tgz"
+  "version" "1.0.1"
 
 "@pkasila/react-katex@^1.2.2":
   "integrity" "sha512-YdYbi0WiHWo9qUd/MZHfj7vUon0OpBva6MK4o/UAXS9bjGi4rwMJf7ifl93/p+51v0cuoHhf7gP5rmSNEPQVtw=="
