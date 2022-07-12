@@ -222,7 +222,7 @@ export default function ContentLayout({children, user}: { children: ReactNode, u
                     </Stack>
                 </Flex>
 
-                <Box as="main" pt={4}>
+                <Box as="main" py={4}>
                     {children}
                 </Box>
             </Box>
