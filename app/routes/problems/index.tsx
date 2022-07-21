@@ -4,6 +4,7 @@ import {json} from "@remix-run/cloudflare";
 import {GraphQLClient} from '@pkasila/graphql-request-fetch';
 import {Heading, SimpleGrid, Container} from "@chakra-ui/react";
 import ProblemCard from "~/components/problems/problem-card";
+import PaginationComponent from '~/components/pagination-component';
 import type Problem from "~/types/problem";
 
 export const loader: LoaderFunction = async ({request}) => {
@@ -12,17 +13,17 @@ export const loader: LoaderFunction = async ({request}) => {
     const page = parseInt(params.page ?? "0", 10);
 
     const query = `query ProblemsIndex($page: Int, $size: Int) {
-    problems(page: $page, size: $size) {
-        id
-        type
-        problem
-        tags {
+        problems(page: $page, size: $size) {
             id
-            color
-            title
+            type
+            problem
+            tags {
+                id
+                color
+                title
+            }
         }
-    }
-}`
+    }`
 
     const client = new GraphQLClient('https://coreapi-sf.pkasila.net/graphql');
     const results = await client.request(query,{
@@ -68,5 +69,7 @@ export default function ProblemsIndex() {
                                                                         problem={problem}></ProblemCard>)
             }
         </SimpleGrid>
+        
+        <PaginationComponent currentPage={page} />
     </Container>;
 }
