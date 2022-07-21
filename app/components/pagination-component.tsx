@@ -11,9 +11,9 @@ import {
     PopoverTrigger,
     PopoverContent
 } from '@chakra-ui/react';
+import { BiLeftArrowAlt, BiRightArrowAlt } from 'react-icons/bi';
 import { useNavigate } from '@remix-run/react';
 import { useState } from 'react';
-import { BiLeftArrowAlt, BiRightArrowAlt } from 'react-icons/bi';
 
 export default function PaginationComponent(props: any) {
     const {url, currentPage, totalElements, size} = props;
@@ -35,8 +35,7 @@ export default function PaginationComponent(props: any) {
         
         const nums = '0123456789';
         if(pageInput.length === 0 || 
-            (nums.includes(pageInput[pageInput.length-1]) &&
-            pageInput[0] != "0")) {
+            (nums.includes(pageInput[pageInput.length-1]) && pageInput[0] != "0")) {
             setPage(e.target.value);
         }
     }
@@ -90,7 +89,6 @@ export default function PaginationComponent(props: any) {
                         icon={<BiRightArrowAlt />} 
                         onClick={setNextPage} />
                 </ButtonGroup>            
-                    
             </HStack>
         </Center>
     )
