@@ -6,25 +6,28 @@ import {
     IconButton,
     Input,
     InputRightAddon,
-    Center
+    Center,
+    Popover,
+    PopoverTrigger,
+    PopoverContent
 } from '@chakra-ui/react';
 import { useNavigate } from '@remix-run/react';
 import { useState } from 'react';
 import { BiLeftArrowAlt, BiRightArrowAlt } from 'react-icons/bi';
 
 export default function PaginationComponent(props: any) {
-    const {currentPage} = props;
+    const {url, currentPage, totalElements, size} = props;
 
     const [page, setPage] = useState('');
-    const [isInvalidPage, setIsInvalidPage] = useState(false);
     const navigate = useNavigate();
+    const pagesCount = Math.ceil(totalElements/size);
 
     const setPreviousPage = () => {
-        navigate(`/problems/?page=${currentPage-1}`);
+        navigate(`${url}?page=${currentPage-1}`);
     }
 
     const setNextPage = () => {
-        navigate(`/problems/?page=${currentPage+1}`);
+        navigate(`${url}?page=${currentPage+1}`);
     }
 
     const handlePageChange = (e: any) => {
@@ -39,7 +42,24 @@ export default function PaginationComponent(props: any) {
     }
 
     const openPage = () => {
-        navigate(`/problems/?page=${parseInt(page, 10)-1}`);
+        navigate(`${url}?page=${page.length ? (parseInt(page, 10)-1) : 0}`);
+    }
+
+    const pageSearcher = () => {
+        return(
+            <InputGroup>
+                <Input 
+                    value={page} 
+                    placeholder='Open page'
+                    onChange={handlePageChange} />
+                <InputRightAddon>
+                    <Button 
+                        disabled={parseInt(page)>pagesCount} 
+                        variant='link'
+                        onClick={openPage}>Go</Button>
+                </InputRightAddon>
+            </InputGroup>
+        )
     }
 
     return (
@@ -51,26 +71,26 @@ export default function PaginationComponent(props: any) {
                         icon={<BiLeftArrowAlt />} 
                         disabled={!currentPage}
                         onClick={setPreviousPage} />
-                    <Button>{currentPage+1} of 35</Button>
+
+                    <Popover placement='top'>
+                        <PopoverTrigger>
+                            <Button 
+                                title={'Search page'}>
+                                    {currentPage+1} of {pagesCount}
+                            </Button>
+                        </PopoverTrigger>
+                        <PopoverContent>
+                            {pageSearcher()}
+                        </PopoverContent>
+                    </Popover>
+                    
                     <IconButton 
                         aria-label='next-page' 
+                        disabled={currentPage+1 === pagesCount}
                         icon={<BiRightArrowAlt />} 
                         onClick={setNextPage} />
-                </ButtonGroup>
-
-                <InputGroup>
-                    <Input 
-                        isInvalid={isInvalidPage}
-                        value={page} 
-                        placeholder='Open page'
-                        onChange={handlePageChange} />
-                    <InputRightAddon>
-                        <Button 
-                            disabled={false} 
-                            variant='link'
-                            onClick={openPage}>Go</Button>
-                    </InputRightAddon>
-                </InputGroup>
+                </ButtonGroup>            
+                    
             </HStack>
         </Center>
     )

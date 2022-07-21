@@ -48,7 +48,7 @@ export const meta: MetaFunction = () => {
 
 export default function ProblemsIndex() {
     const {size, page, results} = useLoaderData();
-
+    console.log(results);
     return <Container maxW={'5xl'}>
         <Heading
             mt={2}
@@ -70,6 +70,10 @@ export default function ProblemsIndex() {
             }
         </SimpleGrid>
         
-        <PaginationComponent currentPage={page} />
+        <PaginationComponent 
+            url={'/problems/'}
+            currentPage={page}
+            totalElements={459} //need getting total problems count
+            size={size} />
     </Container>;
 }
