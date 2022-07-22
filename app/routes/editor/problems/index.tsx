@@ -1,6 +1,6 @@
 import type {LoaderFunction, MetaFunction} from "@remix-run/cloudflare";
 import tokenCheck from "~/services/token-check";
-import {useLoaderData} from "@remix-run/react";
+import {useLoaderData, useSubmit} from "@remix-run/react";
 import {json} from "@remix-run/cloudflare";
 import {GraphQLClient} from '@pkasila/graphql-request-fetch';
 import {
@@ -14,10 +14,11 @@ import {
     Tfoot,
     Tr,
     useColorModeValue,
-    Box, useBreakpointValue
+    Box, useBreakpointValue, IconButton, Center
 } from "@chakra-ui/react";
 import type Problem from "~/types/problem";
 import ProblemRow from "~/components/editor/problem-row";
+import { AddIcon } from "@chakra-ui/icons";
 
 export const loader: LoaderFunction = async ({request}) => {
     const params = Object.fromEntries(new URL(request.url).searchParams.entries());
@@ -67,6 +68,15 @@ export const meta: MetaFunction = ({data}) => {
 export default function EditorProblemsIndex() {
     const {size, page, selection, results, url} = useLoaderData();
 
+    const submit = useSubmit();
+
+    const add = () => {
+        submit({
+            url,
+            act: 'add'
+        }, { method: "post", action: `/editor/problems/new` });
+    }
+
     return <Container maxW={'5xl'}>
         <Heading
             mt={2}
@@ -85,8 +95,14 @@ export default function EditorProblemsIndex() {
                 <Table size='sm'>
                     <Thead>
                         <Tr>
-                            <Th isNumeric>#</Th>
-                            <Th>Tags</Th>
+                            <Th>
+                                <IconButton 
+                                    size='sm' 
+                                    icon={<AddIcon />} 
+                                    aria-label='add-problem' 
+                                    onClick={() => add()} />
+                            </Th>
+                            <Th textAlign={'center'}>Tags</Th>
                             <Th>Problem</Th>
                             <Th>Actions</Th>
                         </Tr>

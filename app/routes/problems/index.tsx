@@ -13,17 +13,17 @@ export const loader: LoaderFunction = async ({request}) => {
     const page = parseInt(params.page ?? "0", 10);
 
     const query = `query ProblemsIndex($page: Int, $size: Int) {
-        problems(page: $page, size: $size) {
+    problems(page: $page, size: $size) {
+        id
+        type
+        problem
+        tags {
             id
-            type
-            problem
-            tags {
-                id
-                color
-                title
-            }
+            color
+            title
         }
-    }`
+    }
+}`
 
     const client = new GraphQLClient('https://coreapi-sf.pkasila.net/graphql');
     const results = await client.request(query,{
@@ -48,7 +48,7 @@ export const meta: MetaFunction = () => {
 
 export default function ProblemsIndex() {
     const {size, page, results} = useLoaderData();
-    console.log(results);
+
     return <Container maxW={'5xl'}>
         <Heading
             mt={2}

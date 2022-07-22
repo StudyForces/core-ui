@@ -35,9 +35,9 @@ export const action: ActionFunction = async ({ request, params }) => {
     const user = await tokenCheck(request);
 
     let query: string;
-    let variables: any = {
+    let variables: any = params.id !== 'new' ? {
         id: params.problemId
-    };
+    }: {};
     let redirectPath: string = data.get('url') as string || '/editor/problems';
 
     const headers: any = {};
@@ -55,18 +55,37 @@ export const action: ActionFunction = async ({ request, params }) => {
 }`;
             break;
         case 'post':
-            const solution = data.get('solution');
-            variables["input"] = {
-                problem: data.get('problem'),
-                solution: solution === '' ? null : solution,
-                type: data.get('type'),
-                tagIds: (data.get('tags') as string).split(',').map(id => parseInt(id, 10))
-            };
-            query = `mutation ProblemUpdate($id: ID!, $input: ProblemInput) {
+            switch (data.get('act')) {
+                case 'update':
+                    const solution = data.get('solution');
+                    variables["input"] = {
+                        problem: data.get('problem'),
+                        solution: solution === '' ? null : solution,
+                        type: data.get('type'),
+                        tagIds: (data.get('tags') as string).split(',').map(id => parseInt(id, 10))
+                    };
+                    query = `mutation ProblemUpdate($id: ID!, $input: ProblemInput) {
     updateProblem(id: $id, input: $input) {
         id
     }
 }`;
+                    break;
+                case 'add':
+                    variables["input"] = {
+                        problem: '',
+                        solution: '',
+                        type: 'STATIC',
+                        tagIds: []
+                    };
+                    query = `mutation ProblemAdd($input: ProblemInput) {
+    addProblem(input: $input) {
+        problem
+    }
+}`;
+                    break;
+                default:
+                    return redirect(redirectPath);
+            }
             break;
         case 'put':
             switch (data.get('act')) {
@@ -93,9 +112,10 @@ export const action: ActionFunction = async ({ request, params }) => {
             return redirect(redirectPath);
     }
 
+    
     const client = new GraphQLClient('https://coreapi-sf.pkasila.net/graphql', { headers });
-    await client.request(query, variables);
-
+    const result = await client.request(query, variables);
+    console.log(result);
     return redirect(redirectPath);
 }
 
@@ -181,8 +201,11 @@ export default function EditorProblem() {
         if (!hasSolution) {
             setSolution('');
         }
+        const sub = tags.map(t => `${t.id}`).join(',');
+        console.log(sub);
         submit({
             url,
+            act: 'update',
             problem,
             solution: hasSolution ? solution : '',
             type,
