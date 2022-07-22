@@ -72,7 +72,7 @@ export const action: ActionFunction = async ({ request, params }) => {
                     break;
                 case 'add':
                     variables["input"] = {
-                        problem: '',
+                        problem: 'New problem',
                         solution: '',
                         type: 'STATIC',
                         tagIds: []
