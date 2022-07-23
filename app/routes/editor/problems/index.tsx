@@ -69,7 +69,6 @@ export const meta: MetaFunction = ({data}) => {
 
 export default function EditorProblemsIndex() {
     const {size, page, selection, results, url} = useLoaderData();
-    console.log(selection);
     const submit = useSubmit();
 
     const add = () => {
@@ -126,7 +125,7 @@ export default function EditorProblemsIndex() {
         <PaginationComponent 
             url={`/editor/problems?selection=${selection.toLowerCase()}`}
             currentPage={page}
-            totalElements={400}
+            totalElements={results.problemsCount}
             size={size}
             />
     </Container>;

@@ -74,7 +74,7 @@ export default function ProblemsIndex() {
         <PaginationComponent 
             url={'/problems'}
             currentPage={page}
-            totalElements={459}
+            totalElements={results.problemsCount}
             size={size} />
     </Container>;
 }

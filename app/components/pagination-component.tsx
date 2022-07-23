@@ -18,7 +18,7 @@ export default function PaginationComponent(props: any) {
     const [page, setPage] = useState('');
     const [isOpenPageSercher, setIsOpenPageSercher] = useState(false);
     const navigate = useNavigate();
-    const pagesCount = Math.ceil(totalElements/size);
+    const pagesCount = Math.ceil(totalElements/size) === 0 ? 1 : Math.ceil(totalElements/size);
     const paramsSign = url.includes('?') ? '&' : '?';
 
     const setPreviousPage = () => {
