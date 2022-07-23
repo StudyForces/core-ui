@@ -71,9 +71,9 @@ export default function ProblemsIndex() {
         </SimpleGrid>
         
         <PaginationComponent 
-            url={'/problems/'}
+            url={'/problems'}
             currentPage={page}
-            totalElements={459} //need getting total problems count
+            totalElements={459}
             size={size} />
     </Container>;
 }

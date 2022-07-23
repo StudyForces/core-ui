@@ -14,11 +14,12 @@ import {
     Tfoot,
     Tr,
     useColorModeValue,
-    Box, useBreakpointValue, IconButton, Center, Button
+    Box, useBreakpointValue
 } from "@chakra-ui/react";
 import type Problem from "~/types/problem";
 import ProblemRow from "~/components/editor/problem-row";
 import { AddIcon } from "@chakra-ui/icons";
+import PaginationComponent from "~/components/pagination-component";
 
 export const loader: LoaderFunction = async ({request}) => {
     const params = Object.fromEntries(new URL(request.url).searchParams.entries());
@@ -120,5 +121,12 @@ export default function EditorProblemsIndex() {
                 </Table>
             </TableContainer>
         </Box>
+
+        <PaginationComponent 
+            url={`/editor/problems?selection=${selection.toLowerCase()}`}
+            currentPage={page}
+            totalElements={400}
+            size={size}
+            />
     </Container>;
 }

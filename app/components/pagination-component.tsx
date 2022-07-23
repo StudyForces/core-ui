@@ -19,13 +19,14 @@ export default function PaginationComponent(props: any) {
     const [isOpenPageSercher, setIsOpenPageSercher] = useState(false);
     const navigate = useNavigate();
     const pagesCount = Math.ceil(totalElements/size);
+    const paramsSign = url.includes('?') ? '&' : '?';
 
     const setPreviousPage = () => {
-        navigate(`${url}?page=${currentPage-1}`);
+        navigate(`${url}${paramsSign}page=${currentPage-1}`);
     }
 
     const setNextPage = () => {
-        navigate(`${url}?page=${currentPage+1}`);
+        navigate(`${url}${paramsSign}page=${currentPage+1}`);
     }
 
     const handlePageChange = (e: any) => {
@@ -39,7 +40,7 @@ export default function PaginationComponent(props: any) {
     }
 
     const openPage = () => {
-        navigate(`${url}?page=${page.length ? (parseInt(page, 10)-1) : 0}`);
+        navigate(`${url}${paramsSign}page=${page.length ? (parseInt(page, 10)-1) : 0}`);
     }
 
     const pageSearcher = () => {
