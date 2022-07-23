@@ -14,7 +14,7 @@ import {
     Tfoot,
     Tr,
     useColorModeValue,
-    Box, useBreakpointValue, IconButton, Center
+    Box, useBreakpointValue, IconButton, Center, Button
 } from "@chakra-ui/react";
 import type Problem from "~/types/problem";
 import ProblemRow from "~/components/editor/problem-row";
@@ -67,7 +67,7 @@ export const meta: MetaFunction = ({data}) => {
 
 export default function EditorProblemsIndex() {
     const {size, page, selection, results, url} = useLoaderData();
-
+    console.log(selection);
     const submit = useSubmit();
 
     const add = () => {
@@ -96,11 +96,13 @@ export default function EditorProblemsIndex() {
                     <Thead>
                         <Tr>
                             <Th>
-                                <IconButton 
-                                    size='sm' 
-                                    icon={<AddIcon />} 
-                                    aria-label='add-problem' 
-                                    onClick={() => add()} />
+                                {
+                                    selection !== 'PUBLISHED' ?
+                                    <AddIcon 
+                                        boxSize={'1.3em'}
+                                        cursor={'pointer'} 
+                                        onClick={() => add()} /> : <span>#</span>
+                                }
                             </Th>
                             <Th textAlign={'center'}>Tags</Th>
                             <Th>Problem</Th>

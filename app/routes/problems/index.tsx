@@ -48,7 +48,7 @@ export const meta: MetaFunction = () => {
 
 export default function ProblemsIndex() {
     const {size, page, results} = useLoaderData();
-
+    console.log(size, page, results);
     return <Container maxW={'5xl'}>
         <Heading
             mt={2}

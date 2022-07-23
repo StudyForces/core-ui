@@ -6,10 +6,7 @@ import {
     IconButton,
     Input,
     InputRightAddon,
-    Center,
-    Popover,
-    PopoverTrigger,
-    PopoverContent
+    ScaleFade
 } from '@chakra-ui/react';
 import { BiLeftArrowAlt, BiRightArrowAlt } from 'react-icons/bi';
 import { useNavigate } from '@remix-run/react';
@@ -19,6 +16,7 @@ export default function PaginationComponent(props: any) {
     const {url, currentPage, totalElements, size} = props;
 
     const [page, setPage] = useState('');
+    const [isOpenPageSercher, setIsOpenPageSercher] = useState(false);
     const navigate = useNavigate();
     const pagesCount = Math.ceil(totalElements/size);
 
@@ -62,34 +60,30 @@ export default function PaginationComponent(props: any) {
     }
 
     return (
-        <Center>
-            <HStack pt={4}>
-                <ButtonGroup isAttached variant='outline'>
-                    <IconButton 
-                        aria-label='previous-page' 
-                        icon={<BiLeftArrowAlt />} 
-                        disabled={!currentPage}
-                        onClick={setPreviousPage} />
+        <HStack pt={4}>
+            <ButtonGroup isAttached variant='outline'>
+                <IconButton 
+                    aria-label='previous-page' 
+                    icon={<BiLeftArrowAlt />} 
+                    disabled={!currentPage}
+                    onClick={setPreviousPage} />
 
-                    <Popover placement='top'>
-                        <PopoverTrigger>
-                            <Button 
-                                title={'Search page'}>
-                                    {currentPage+1} of {pagesCount}
-                            </Button>
-                        </PopoverTrigger>
-                        <PopoverContent>
-                            {pageSearcher()}
-                        </PopoverContent>
-                    </Popover>
-                    
-                    <IconButton 
-                        aria-label='next-page' 
-                        disabled={currentPage+1 === pagesCount}
-                        icon={<BiRightArrowAlt />} 
-                        onClick={setNextPage} />
-                </ButtonGroup>            
-            </HStack>
-        </Center>
+                <Button 
+                    title={'Search page'}
+                    onClick={()=>setIsOpenPageSercher(!isOpenPageSercher)}>
+                        {currentPage+1} of {pagesCount}
+                </Button>
+
+                <IconButton 
+                    aria-label='next-page' 
+                    disabled={currentPage+1 === pagesCount}
+                    icon={<BiRightArrowAlt />} 
+                    onClick={setNextPage} />
+            </ButtonGroup>
+
+            <ScaleFade initialScale={0.9} in={isOpenPageSercher}>
+                {pageSearcher()}
+            </ScaleFade>            
+        </HStack>
     )
 }

@@ -74,12 +74,12 @@ export const action: ActionFunction = async ({ request, params }) => {
                     variables["input"] = {
                         problem: 'New problem',
                         solution: '',
-                        type: 'STATIC',
+                        type: ProblemType.STATIC,
                         tagIds: []
                     };
                     query = `mutation ProblemAdd($input: ProblemInput) {
     addProblem(input: $input) {
-        problem
+        id
     }
 }`;
                     break;
