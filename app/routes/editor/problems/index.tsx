@@ -74,7 +74,7 @@ export default function EditorProblemsIndex() {
 
     const add = () => {
         submit({
-            _url,
+            url: _url,
             act: 'add'
         }, { method: "post", action: `/editor/problems/new` });
     }

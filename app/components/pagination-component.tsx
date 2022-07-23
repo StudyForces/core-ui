@@ -22,8 +22,7 @@ export default function PaginationComponent(props: any) {
 
     const navigatePage = (pageNum: number) => {
         let params = new URLSearchParams(url.search);
-        params.delete('page');
-        params.append('page', pageNum.toString());
+        params.set('page', pageNum.toString());
         navigate(`?${params.toString()}`);
     }
 

@@ -114,8 +114,8 @@ export const action: ActionFunction = async ({ request, params }) => {
 
     
     const client = new GraphQLClient('https://coreapi-sf.pkasila.net/graphql', { headers });
-    const result = await client.request(query, variables);
-    console.log(result);
+    await client.request(query, variables);
+
     return redirect(redirectPath);
 }
 
@@ -201,8 +201,7 @@ export default function EditorProblem() {
         if (!hasSolution) {
             setSolution('');
         }
-        const sub = tags.map(t => `${t.id}`).join(',');
-        console.log(sub);
+        
         submit({
             url,
             act: 'update',
