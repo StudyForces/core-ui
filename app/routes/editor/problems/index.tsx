@@ -39,6 +39,7 @@ export const loader: LoaderFunction = async ({request}) => {
             color
         }
     }
+    problemsCount: myProblemsCount(selection: $selection)
 }`
 
     const headers: any = {};
