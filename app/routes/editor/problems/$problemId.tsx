@@ -35,9 +35,9 @@ export const action: ActionFunction = async ({ request, params }) => {
     const user = await tokenCheck(request);
 
     let query: string;
-    let variables: any = params.id !== 'new' ? {
+    let variables: any = {
         id: params.problemId
-    }: {};
+    };
     let redirectPath: string = data.get('url') as string || '/editor/problems';
 
     const headers: any = {};
@@ -114,7 +114,8 @@ export const action: ActionFunction = async ({ request, params }) => {
 
     
     const client = new GraphQLClient('https://coreapi-sf.pkasila.net/graphql', { headers });
-    await client.request(query, variables);
+    const results: any = await client.request(query, variables);
+    redirectPath = params.problemId === 'new' ? `${redirectPath}/${results.addProblem.id}` : redirectPath;
 
     return redirect(redirectPath);
 }
