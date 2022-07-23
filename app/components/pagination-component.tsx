@@ -19,14 +19,12 @@ export default function PaginationComponent(props: any) {
     const [isOpenPageSercher, setIsOpenPageSercher] = useState(false);
     const navigate = useNavigate();
     const pagesCount = Math.ceil(totalElements/size) === 0 ? 1 : Math.ceil(totalElements/size);
-    const paramsSign = url.includes('?') ? '&' : '?';
 
-    const setPreviousPage = () => {
-        navigate(`${url}${paramsSign}page=${currentPage-1}`);
-    }
-
-    const setNextPage = () => {
-        navigate(`${url}${paramsSign}page=${currentPage+1}`);
+    const navigatePage = (pageNum: number) => {
+        let params = new URLSearchParams(url.search);
+        params.delete('page');
+        params.append('page', pageNum.toString());
+        navigate(`?${params.toString()}`);
     }
 
     const handlePageChange = (e: any) => {
@@ -37,10 +35,6 @@ export default function PaginationComponent(props: any) {
             (nums.includes(pageInput[pageInput.length-1]) && pageInput[0] != "0")) {
             setPage(e.target.value);
         }
-    }
-
-    const openPage = () => {
-        navigate(`${url}${paramsSign}page=${page.length ? (parseInt(page, 10)-1) : 0}`);
     }
 
     const pageSearcher = () => {
@@ -54,7 +48,7 @@ export default function PaginationComponent(props: any) {
                     <Button 
                         disabled={parseInt(page)>pagesCount} 
                         variant='link'
-                        onClick={openPage}>Go</Button>
+                        onClick={() => navigatePage(page.length ? (parseInt(page, 10)-1) : 0)}>Go</Button>
                 </InputRightAddon>
             </InputGroup>
         )
@@ -67,7 +61,7 @@ export default function PaginationComponent(props: any) {
                     aria-label='previous-page' 
                     icon={<BiLeftArrowAlt />} 
                     disabled={!currentPage}
-                    onClick={setPreviousPage} />
+                    onClick={() => navigatePage(currentPage-1)} />
 
                 <Button 
                     title={'Search page'}
@@ -79,7 +73,7 @@ export default function PaginationComponent(props: any) {
                     aria-label='next-page' 
                     disabled={currentPage+1 === pagesCount}
                     icon={<BiRightArrowAlt />} 
-                    onClick={setNextPage} />
+                    onClick={() => navigatePage(currentPage+1)} />
             </ButtonGroup>
 
             <ScaleFade initialScale={0.9} in={isOpenPageSercher}>

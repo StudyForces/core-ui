@@ -57,7 +57,7 @@ export const loader: LoaderFunction = async ({request}) => {
 
     const url = new URL(request.url);
 
-    return json({size, page, selection, results, url: url.pathname+url.search});
+    return json({size, page, selection, results, url});
 }
 
 export const meta: MetaFunction = ({data}) => {
@@ -69,11 +69,12 @@ export const meta: MetaFunction = ({data}) => {
 
 export default function EditorProblemsIndex() {
     const {size, page, selection, results, url} = useLoaderData();
+    const _url = url.pathname + url.search;
     const submit = useSubmit();
 
     const add = () => {
         submit({
-            url,
+            _url,
             act: 'add'
         }, { method: "post", action: `/editor/problems/new` });
     }
@@ -113,7 +114,7 @@ export default function EditorProblemsIndex() {
                     <Tbody>
                         {
                             results.problems.map((problem: Problem) => <ProblemRow key={problem.id} problem={problem}
-                                                                                   url={url}></ProblemRow>)
+                                                                                   url={_url}></ProblemRow>)
                         }
                     </Tbody>
                     <Tfoot>
@@ -123,7 +124,7 @@ export default function EditorProblemsIndex() {
         </Box>
 
         <PaginationComponent 
-            url={`/editor/problems?selection=${selection.toLowerCase()}`}
+            url={url}
             currentPage={page}
             totalElements={results.problemsCount}
             size={size}

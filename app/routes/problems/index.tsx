@@ -37,7 +37,8 @@ export const loader: LoaderFunction = async ({request}) => {
         cacheOverride: true
     });
 
-    return json({size, page, results});
+    const url = new URL(request.url);
+    return json({size, page, results, url});
 }
 
 export const meta: MetaFunction = () => {
@@ -48,7 +49,7 @@ export const meta: MetaFunction = () => {
 };
 
 export default function ProblemsIndex() {
-    const {size, page, results} = useLoaderData();
+    const {size, page, results, url} = useLoaderData();
     
     return <Container maxW={'5xl'}>
         <Heading
@@ -72,7 +73,7 @@ export default function ProblemsIndex() {
         </SimpleGrid>
         
         <PaginationComponent 
-            url={'/problems'}
+            url={url}
             currentPage={page}
             totalElements={results.problemsCount}
             size={size} />
