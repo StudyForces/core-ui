@@ -112,10 +112,12 @@ export const action: ActionFunction = async ({ request, params }) => {
             return redirect(redirectPath);
     }
 
-    
     const client = new GraphQLClient('https://coreapi-sf.pkasila.net/graphql', { headers });
     const results: any = await client.request(query, variables);
-    redirectPath = params.problemId === 'new' ? `${redirectPath}/${results.addProblem.id}` : redirectPath;
+
+    if (params.problemId === 'new') {
+        redirectPath = `/editor/problems/${results.addProblem.id}`;
+    }
 
     return redirect(redirectPath);
 }
@@ -202,7 +204,7 @@ export default function EditorProblem() {
         if (!hasSolution) {
             setSolution('');
         }
-        
+
         submit({
             url,
             act: 'update',
