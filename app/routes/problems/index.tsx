@@ -23,6 +23,7 @@ export const loader: LoaderFunction = async ({request}) => {
             title
         }
     }
+    problemsCount
 }`
 
     const client = new GraphQLClient('https://coreapi-sf.pkasila.net/graphql');
