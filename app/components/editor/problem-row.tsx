@@ -73,9 +73,12 @@ export default function ProblemRow({problem, url}: {problem: Problem, url: strin
                 <MenuButton as={Button} isLoading={transition.state !== "idle"} colorScheme='brand' size={'sm'}>
                     Actions
                 </MenuButton>
-                <MenuList>
-                    <MenuGroup title='Core'>
-                        <MenuItem as={RemixLink} to={`/problems/${problem.id}`}>View</MenuItem>
+                <MenuList pt={0} fontSize={'sm'}>
+                    <MenuGroup title='Core' pt={1}>
+                        {
+                            problem.published ? <MenuItem as={RemixLink} to={`/problems/${problem.id}`}>View</MenuItem> :
+                                null
+                        }
                         <MenuItem as={RemixLink} to={`${problem.id}`}>Edit</MenuItem>
                         {
                             problem.createdBy == null ? <MenuItem onClick={() => takeOwnership(problem)}>
@@ -94,7 +97,7 @@ export default function ProblemRow({problem, url}: {problem: Problem, url: strin
                     {
                         problem.sourcesId ? <>
                             <MenuDivider />
-                            <MenuGroup title='Sources'>
+                            <MenuGroup title='Sources' pt={1}>
                                 <MenuItem as={'a'} href={`https://sources-sf.pkasila.net/problems/${problem.sourcesId}`}>
                                     Synced as #{problem.sourcesId}
                                 </MenuItem>
