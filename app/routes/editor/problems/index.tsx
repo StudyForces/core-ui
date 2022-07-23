@@ -11,15 +11,14 @@ import {
     Thead,
     Th,
     Tbody,
-    Tfoot,
     Tr,
     useColorModeValue,
-    Box, useBreakpointValue
+    Box, useBreakpointValue, IconButton, Flex, Spacer,
 } from "@chakra-ui/react";
 import type Problem from "~/types/problem";
 import ProblemRow from "~/components/editor/problem-row";
-import { AddIcon } from "@chakra-ui/icons";
 import PaginationComponent from "~/components/pagination-component";
+import {IoPencilSharp} from "react-icons/all";
 
 export const loader: LoaderFunction = async ({request}) => {
     const params = Object.fromEntries(new URL(request.url).searchParams.entries());
@@ -79,13 +78,25 @@ export default function EditorProblemsIndex() {
     }
 
     return <Container maxW={'5xl'}>
-        <Heading
-            mt={2}
-            mb={6}
-            fontSize={'4xl'}
-            fontFamily={'body'}>
-            Editor/Problems/{selection}
-        </Heading>
+        <Flex align={'center'}
+              mt={2}
+              mb={6}>
+            <Heading
+                fontSize={'4xl'}
+                fontFamily={'body'}
+                noOfLines={1}>
+                Editor/Problems/{selection}
+            </Heading>
+            <Spacer/>
+            <IconButton
+                size={'sm'}
+                variant={useColorModeValue('solid', 'outline')}
+                colorScheme='brand'
+                aria-label='Add new problem'
+                icon={<IoPencilSharp />}
+                onClick={() => add()}
+            />
+        </Flex>
         <Box w={'full'}
              bg={useColorModeValue('white', 'gray.900')}
              borderWidth='1px' borderRadius='lg'
@@ -96,15 +107,7 @@ export default function EditorProblemsIndex() {
                 <Table size='sm'>
                     <Thead>
                         <Tr>
-                            <Th>
-                                {
-                                    selection !== 'PUBLISHED' ?
-                                    <AddIcon 
-                                        boxSize={'1.3em'}
-                                        cursor={'pointer'} 
-                                        onClick={() => add()} /> : <span>#</span>
-                                }
-                            </Th>
+                            <Th>#</Th>
                             <Th textAlign={'center'}>Tags</Th>
                             <Th>Problem</Th>
                             <Th>Actions</Th>
@@ -116,13 +119,11 @@ export default function EditorProblemsIndex() {
                                                                                    url={requestingURL}></ProblemRow>)
                         }
                     </Tbody>
-                    <Tfoot>
-                    </Tfoot>
                 </Table>
             </TableContainer>
         </Box>
 
-        <PaginationComponent 
+        <PaginationComponent
             url={url}
             currentPage={page}
             totalElements={results.problemsCount}

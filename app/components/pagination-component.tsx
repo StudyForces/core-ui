@@ -8,9 +8,9 @@ import {
     ScaleFade,
     Stack
 } from '@chakra-ui/react';
-import { BiLeftArrowAlt, BiRightArrowAlt } from 'react-icons/bi';
-import { useNavigate } from '@remix-run/react';
-import { useState } from 'react';
+import {BiLeftArrowAlt, BiRightArrowAlt} from 'react-icons/bi';
+import {useNavigate} from '@remix-run/react';
+import {FormEvent, useState} from 'react';
 
 export default function PaginationComponent(props: any) {
     const {url, currentPage, totalElements, size} = props;
@@ -18,7 +18,7 @@ export default function PaginationComponent(props: any) {
     const [page, setPage] = useState('');
     const [isOpenPageSercher, setIsOpenPageSercher] = useState(false);
     const navigate = useNavigate();
-    const pagesCount = Math.ceil(totalElements/size) === 0 ? 1 : Math.ceil(totalElements/size);
+    const pagesCount = Math.ceil(totalElements / size) === 0 ? 1 : Math.ceil(totalElements / size);
 
     const navigatePage = (pageNum: number) => {
         let params = new URLSearchParams(url.search);
@@ -26,58 +26,59 @@ export default function PaginationComponent(props: any) {
         navigate(`?${params.toString()}`);
     }
 
-    const handlePageChange = (e: any) => {
-        const pageInput: string = e.target.value;
-        
-        const nums = '0123456789';
-        if(pageInput.length === 0 || 
-            (nums.includes(pageInput[pageInput.length-1]) && pageInput[0] != "0")) {
-            setPage(e.target.value);
-        }
-    }
-
     const pageSearcher = () => {
-        return(
-            <InputGroup>
-                <Input 
-                    value={page} 
-                    placeholder='Open page'
-                    onChange={handlePageChange} />
-                <InputRightAddon>
-                    <Button 
-                        disabled={parseInt(page)>pagesCount} 
-                        variant='link'
-                        onClick={() => navigatePage(page.length ? (parseInt(page, 10)-1) : 0)}>Go</Button>
-                </InputRightAddon>
-            </InputGroup>
+        const enabled = !isNaN(parseInt(page)) && parseInt(page) <= pagesCount && parseInt(page) > 0;
+
+        const navigate = (event: FormEvent<HTMLFormElement>) => {
+            event.preventDefault();
+            navigatePage(page.length ? (parseInt(page, 10) - 1) : 0)
+        };
+
+        console.log('en', enabled);
+
+        return (
+            <form onSubmit={enabled ? navigate : (event) => {event.preventDefault()}}>
+                <InputGroup>
+                    <Input
+                        name={'page'}
+                        value={page}
+                        placeholder='Page number...'
+                        onChange={(e) => setPage(e.target.value)}/>
+                    <InputRightAddon p={0}>
+                        <Button type={'submit'}
+                                disabled={!enabled}
+                                borderLeftRadius={0}>Go</Button>
+                    </InputRightAddon>
+                </InputGroup>
+            </form>
         )
     }
 
     return (
         <Stack direction={['column', 'row']} pt={4}>
             <ButtonGroup isAttached variant='outline' alignItems={'center'}>
-                <IconButton 
-                    aria-label='previous-page' 
-                    icon={<BiLeftArrowAlt />} 
+                <IconButton
+                    aria-label='previous-page'
+                    icon={<BiLeftArrowAlt/>}
                     disabled={!currentPage}
-                    onClick={() => navigatePage(currentPage-1)} />
+                    onClick={() => navigatePage(currentPage - 1)}/>
 
-                <Button 
+                <Button
                     title={'Search page'}
-                    onClick={()=>setIsOpenPageSercher(!isOpenPageSercher)}>
-                        {currentPage+1} of {pagesCount}
+                    onClick={() => setIsOpenPageSercher(!isOpenPageSercher)}>
+                    {currentPage + 1} of {pagesCount}
                 </Button>
 
-                <IconButton 
-                    aria-label='next-page' 
-                    disabled={currentPage+1 === pagesCount}
-                    icon={<BiRightArrowAlt />} 
-                    onClick={() => navigatePage(currentPage+1)} />
+                <IconButton
+                    aria-label='next-page'
+                    disabled={currentPage + 1 === pagesCount}
+                    icon={<BiRightArrowAlt/>}
+                    onClick={() => navigatePage(currentPage + 1)}/>
             </ButtonGroup>
 
             <ScaleFade initialScale={0.9} in={isOpenPageSercher}>
                 {pageSearcher()}
-            </ScaleFade>            
+            </ScaleFade>
         </Stack>
     )
 }
