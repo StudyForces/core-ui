@@ -4,6 +4,7 @@ import {json} from "@remix-run/cloudflare";
 import {GraphQLClient} from '@pkasila/graphql-request-fetch';
 import {Heading, SimpleGrid, Container} from "@chakra-ui/react";
 import ProblemCard from "~/components/problems/problem-card";
+import PaginationComponent from '~/components/pagination-component';
 import type Problem from "~/types/problem";
 
 export const loader: LoaderFunction = async ({request}) => {
@@ -36,7 +37,8 @@ export const loader: LoaderFunction = async ({request}) => {
         cacheOverride: true
     });
 
-    return json({size, page, results});
+    const url = new URL(request.url);
+    return json({size, page, results, url});
 }
 
 export const meta: MetaFunction = () => {
@@ -47,8 +49,8 @@ export const meta: MetaFunction = () => {
 };
 
 export default function ProblemsIndex() {
-    const {size, page, results} = useLoaderData();
-
+    const {size, page, results, url} = useLoaderData();
+    
     return <Container maxW={'5xl'}>
         <Heading
             mt={2}
@@ -69,5 +71,11 @@ export default function ProblemsIndex() {
                                                                         problem={problem}></ProblemCard>)
             }
         </SimpleGrid>
+        
+        <PaginationComponent 
+            url={url}
+            currentPage={page}
+            totalElements={results.problemsCount}
+            size={size} />
     </Container>;
 }

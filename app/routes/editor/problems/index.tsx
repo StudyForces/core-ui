@@ -1,6 +1,6 @@
 import type {LoaderFunction, MetaFunction} from "@remix-run/cloudflare";
 import tokenCheck from "~/services/token-check";
-import {useLoaderData} from "@remix-run/react";
+import {useLoaderData, useSubmit} from "@remix-run/react";
 import {json} from "@remix-run/cloudflare";
 import {GraphQLClient} from '@pkasila/graphql-request-fetch';
 import {
@@ -18,6 +18,8 @@ import {
 } from "@chakra-ui/react";
 import type Problem from "~/types/problem";
 import ProblemRow from "~/components/editor/problem-row";
+import { AddIcon } from "@chakra-ui/icons";
+import PaginationComponent from "~/components/pagination-component";
 
 export const loader: LoaderFunction = async ({request}) => {
     const params = Object.fromEntries(new URL(request.url).searchParams.entries());
@@ -53,9 +55,7 @@ export const loader: LoaderFunction = async ({request}) => {
         page, size, selection
     });
 
-    const url = new URL(request.url);
-
-    return json({size, page, selection, results, url: url.pathname+url.search});
+    return json({size, page, selection, results, url: request.url});
 }
 
 export const meta: MetaFunction = ({data}) => {
@@ -67,6 +67,16 @@ export const meta: MetaFunction = ({data}) => {
 
 export default function EditorProblemsIndex() {
     const {size, page, selection, results, url} = useLoaderData();
+    const _url = new URL(url);
+    const requestingURL = _url.pathname + _url.search;
+    const submit = useSubmit();
+
+    const add = () => {
+        submit({
+            url: requestingURL,
+            act: 'add'
+        }, { method: "post", action: `/editor/problems/new` });
+    }
 
     return <Container maxW={'5xl'}>
         <Heading
@@ -86,8 +96,16 @@ export default function EditorProblemsIndex() {
                 <Table size='sm'>
                     <Thead>
                         <Tr>
-                            <Th isNumeric>#</Th>
-                            <Th>Tags</Th>
+                            <Th>
+                                {
+                                    selection !== 'PUBLISHED' ?
+                                    <AddIcon 
+                                        boxSize={'1.3em'}
+                                        cursor={'pointer'} 
+                                        onClick={() => add()} /> : <span>#</span>
+                                }
+                            </Th>
+                            <Th textAlign={'center'}>Tags</Th>
                             <Th>Problem</Th>
                             <Th>Actions</Th>
                         </Tr>
@@ -95,7 +113,7 @@ export default function EditorProblemsIndex() {
                     <Tbody>
                         {
                             results.problems.map((problem: Problem) => <ProblemRow key={problem.id} problem={problem}
-                                                                                   url={url}></ProblemRow>)
+                                                                                   url={requestingURL}></ProblemRow>)
                         }
                     </Tbody>
                     <Tfoot>
@@ -103,5 +121,12 @@ export default function EditorProblemsIndex() {
                 </Table>
             </TableContainer>
         </Box>
+
+        <PaginationComponent 
+            url={url}
+            currentPage={page}
+            totalElements={results.problemsCount}
+            size={size}
+            />
     </Container>;
 }
