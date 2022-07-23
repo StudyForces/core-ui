@@ -1,12 +1,12 @@
 import {
     InputGroup,
     Button,
-    HStack,
     ButtonGroup,
     IconButton,
     Input,
     InputRightAddon,
-    ScaleFade
+    ScaleFade,
+    Stack
 } from '@chakra-ui/react';
 import { BiLeftArrowAlt, BiRightArrowAlt } from 'react-icons/bi';
 import { useNavigate } from '@remix-run/react';
@@ -61,8 +61,8 @@ export default function PaginationComponent(props: any) {
     }
 
     return (
-        <HStack pt={4}>
-            <ButtonGroup isAttached variant='outline'>
+        <Stack direction={['column', 'row']} pt={4}>
+            <ButtonGroup isAttached variant='outline' alignItems={'center'}>
                 <IconButton 
                     aria-label='previous-page' 
                     icon={<BiLeftArrowAlt />} 
@@ -85,6 +85,6 @@ export default function PaginationComponent(props: any) {
             <ScaleFade initialScale={0.9} in={isOpenPageSercher}>
                 {pageSearcher()}
             </ScaleFade>            
-        </HStack>
+        </Stack>
     )
 }
