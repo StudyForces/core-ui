@@ -6,6 +6,7 @@ import {Heading, Container, chakra, Stack, useColorModeValue, Image, Box, Simple
 import type Problem from "~/types/problem";
 import SectionCard from "~/components/problems/section-card";
 import ReactKatex from "@pkasila/react-katex";
+import Footer from "~/components/layout/footer";
 
 export const loader: LoaderFunction = async ({request, params}) => {
     const query = `query ProblemView($id: ID!) {
@@ -120,6 +121,8 @@ export default function ProblemView() {
                     </SectionCard> : null
                 }
             </Stack>
+
+            <Footer></Footer>
         </Container>
     </>;
 }

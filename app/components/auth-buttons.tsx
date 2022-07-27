@@ -24,13 +24,16 @@ function NotAuthorized() {
         submit(null, {method: "post", action: `/auth/keycloak-reg`});
     }
 
+    const signInLoading = transition.state !== 'idle' && transition.location.pathname == '/auth/keycloak';
+    const signUpLoading = transition.state !== 'idle' && transition.location.pathname == '/auth/keycloak-reg';
+
     return <>
         <Button
             fontSize={'sm'}
             fontWeight={400}
             variant={'link'}
-            disabled={transition.state !== 'idle'}
-            isLoading={transition.state !== 'idle'}
+            disabled={signInLoading}
+            isLoading={signInLoading}
             onClick={transition.state === 'idle' ? signIn : undefined}>
             Sign In
         </Button>
@@ -43,8 +46,8 @@ function NotAuthorized() {
             _hover={{
                 bg: useColorModeValue('brand.500', 'brand.300'),
             }}
-            disabled={transition.state !== 'idle'}
-            isLoading={transition.state !== 'idle'}
+            disabled={signUpLoading}
+            isLoading={signUpLoading}
             onClick={transition.state === 'idle' ? signUp : undefined}>
             Sign Up
         </Button>

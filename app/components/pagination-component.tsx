@@ -46,6 +46,7 @@ export default function PaginationComponent(props: any) {
                         onChange={(e) => setPage(e.target.value)}/>
                     <InputRightAddon p={0}>
                         <Button type={'submit'}
+                                colorScheme={'brand'}
                                 disabled={!enabled}
                                 borderLeftRadius={0}>Go</Button>
                     </InputRightAddon>
@@ -57,11 +58,12 @@ export default function PaginationComponent(props: any) {
     return (
         <Stack direction={['column', 'row']} pt={4}>
             <ButtonGroup isAttached variant='outline' alignItems={'center'}>
-                <IconButton
-                    aria-label='previous-page'
-                    icon={<BiLeftArrowAlt/>}
-                    disabled={!currentPage}
-                    onClick={() => navigatePage(currentPage - 1)}/>
+                {
+                    currentPage ? <IconButton
+                        aria-label='previous-page'
+                        icon={<BiLeftArrowAlt/>}
+                        onClick={() => navigatePage(currentPage - 1)} /> : null
+                }
 
                 <Button
                     title={'Search page'}
@@ -69,11 +71,12 @@ export default function PaginationComponent(props: any) {
                     {currentPage + 1} of {pagesCount}
                 </Button>
 
-                <IconButton
-                    aria-label='next-page'
-                    disabled={currentPage + 1 === pagesCount}
-                    icon={<BiRightArrowAlt/>}
-                    onClick={() => navigatePage(currentPage + 1)}/>
+                {
+                    currentPage + 1 !== pagesCount ? <IconButton
+                        aria-label='next-page'
+                        icon={<BiRightArrowAlt/>}
+                        onClick={() => navigatePage(currentPage + 1)} /> : null
+                }
             </ButtonGroup>
 
             <ScaleFade initialScale={0.9} in={isOpenPageSercher}>

@@ -6,6 +6,7 @@ import {Heading, SimpleGrid, Container} from "@chakra-ui/react";
 import ProblemCard from "~/components/problems/problem-card";
 import PaginationComponent from '~/components/pagination-component';
 import type Problem from "~/types/problem";
+import Footer from "~/components/layout/footer";
 
 export const loader: LoaderFunction = async ({request}) => {
     const params = Object.fromEntries(new URL(request.url).searchParams.entries());
@@ -50,7 +51,7 @@ export const meta: MetaFunction = () => {
 
 export default function ProblemsIndex() {
     const {size, page, results, url} = useLoaderData();
-    
+
     return <Container maxW={'5xl'}>
         <Heading
             mt={2}
@@ -71,11 +72,13 @@ export default function ProblemsIndex() {
                                                                         problem={problem}></ProblemCard>)
             }
         </SimpleGrid>
-        
-        <PaginationComponent 
+
+        <PaginationComponent
             url={url}
             currentPage={page}
             totalElements={results.problemsCount}
             size={size} />
+
+        <Footer></Footer>
     </Container>;
 }

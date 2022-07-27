@@ -42,6 +42,8 @@ export default function ProblemRow({problem, url}: {problem: Problem, url: strin
         }, { method: "delete", action: `/editor/problems/${problem.id}` });
     }
 
+    const loadingProblem = transition.state !== "idle" && transition.location.pathname.endsWith(`/problems/${problem.id}`);
+
     return <Tr key={problem.id}>
         <Td>{problem.id}</Td>
         <Td>
@@ -70,7 +72,7 @@ export default function ProblemRow({problem, url}: {problem: Problem, url: strin
         </Td>
         <Td>
             <Menu>
-                <MenuButton as={Button} isLoading={transition.state !== "idle"} colorScheme='brand' size={'sm'}>
+                <MenuButton as={Button} isLoading={loadingProblem} colorScheme='brand' size={'sm'}>
                     Actions
                 </MenuButton>
                 <MenuList pt={0} fontSize={'sm'}>

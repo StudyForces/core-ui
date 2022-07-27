@@ -13,7 +13,7 @@ import {
     Tbody,
     Tr,
     useColorModeValue,
-    Box, useBreakpointValue, IconButton, Flex, Spacer,
+    Box, useBreakpointValue, IconButton, Flex, Spacer, Tfoot,
 } from "@chakra-ui/react";
 import type Problem from "~/types/problem";
 import ProblemRow from "~/components/editor/problem-row";
@@ -119,6 +119,14 @@ export default function EditorProblemsIndex() {
                                                                                    url={requestingURL}></ProblemRow>)
                         }
                     </Tbody>
+                    <Tfoot>
+                        <Tr>
+                            <Th>#</Th>
+                            <Th textAlign={'center'}>Tags</Th>
+                            <Th>Problem</Th>
+                            <Th>Actions</Th>
+                        </Tr>
+                    </Tfoot>
                 </Table>
             </TableContainer>
         </Box>
