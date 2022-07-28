@@ -14,4 +14,5 @@ export default interface Problem {
     modifiedBy?: string;
     modifiedDate: number;
     tags?: Tag[];
+    solverMetadata?: any;
 }

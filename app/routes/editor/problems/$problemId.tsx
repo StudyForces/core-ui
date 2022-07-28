@@ -29,6 +29,13 @@ import SectionCard from "~/components/problems/section-card";
 import ProblemType from "~/types/problem-type";
 import TagsSelector from "~/components/editor/tags-selector.client";
 
+const emptySolverMetadata = {
+    type: "FORMULA",
+    variants: [],
+    correct: null,
+    formula: ""
+};
+
 export const action: ActionFunction = async ({ request, params }) => {
     const data = await request.formData();
 
@@ -58,11 +65,13 @@ export const action: ActionFunction = async ({ request, params }) => {
             switch (data.get('act')) {
                 case 'update':
                     const solution = data.get('solution');
+                    const solverMetadata = JSON.parse(data.get('solverMetadata') as string);
                     variables["input"] = {
                         problem: data.get('problem'),
                         solution: solution === '' ? null : solution,
                         type: data.get('type'),
-                        tagIds: (data.get('tags') as string).split(',').map(id => parseInt(id, 10))
+                        tagIds: (data.get('tags') as string).split(',').map(id => parseInt(id, 10)),
+                        solverMetadata: solverMetadata === null ? emptySolverMetadata : solverMetadata
                     };
                     query = `mutation ProblemUpdate($id: ID!, $input: ProblemInput) {
     updateProblem(id: $id, input: $input) {
@@ -75,7 +84,8 @@ export const action: ActionFunction = async ({ request, params }) => {
                         problem: 'New problem',
                         solution: null,
                         type: ProblemType.STATIC,
-                        tagIds: []
+                        tagIds: [],
+                        solverMetadata: emptySolverMetadata
                     };
                     query = `mutation ProblemAdd($input: ProblemInput) {
     addProblem(input: $input) {
@@ -143,6 +153,22 @@ export const loader: LoaderFunction = async ({request, params}) => {
             color
             title
         }
+        solverMetadata {
+            type
+            variants {
+                type
+                number
+                string
+                index
+            }
+            correct {
+                type
+                number
+                string
+                index
+            }
+            formula
+        }
     }
     tags {
         id
@@ -186,6 +212,7 @@ export default function EditorProblem() {
     const [problem, setProblem] = useState(results.problem.problem);
     const [solution, setSolution] = useState(results.problem.solution ?? '');
     const [hasSolution, setHasSolution] = useState(results.problem.solution !== null && results.problem.solution !== '');
+    const [solverMetadata, setSolverMetadata] = useState(results.problem.solverMetadata ?? emptySolverMetadata);
 
     const handleProblemChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         const inputValue = e.target.value;
@@ -204,12 +231,13 @@ export default function EditorProblem() {
         if (!hasSolution) {
             setSolution('');
         }
-
+        
         submit({
             url,
             act: 'update',
             problem,
             solution: hasSolution ? solution : '',
+            solverMetadata: JSON.stringify(solverMetadata),
             type,
             tags: tags.map(t => `${t.id}`).join(',')
         }, { method: "post", action: `/editor/problems/${results.problem.id}` });
@@ -240,7 +268,8 @@ export default function EditorProblem() {
                                 type !== results.problem.type ||
                                 JSON.stringify(tags.map(t => t.id).sort()) !== JSON.stringify(results.problem.tags?.map(t => t.id).sort() ?? []) ||
                                 solution !== (results.problem.solution ?? '') ||
-                                hasSolution !== (results.problem.solution !== null && results.problem.solution !== '');
+                                hasSolution !== (results.problem.solution !== null && results.problem.solution !== '') ||
+                                JSON.stringify(solverMetadata) !== JSON.stringify(results.problem.solverMetadata);
 
     return <>
         <Container maxW={'5xl'} as={'article'}>
@@ -289,6 +318,16 @@ export default function EditorProblem() {
                         placeholder='Problem...'
                     />
                 </SectionCard>
+
+                {/* <SectionCard title={'Solve'}>
+                    <ReactKatex breakLine={true} strict={false} children={solverMetadata.formula}></ReactKatex>
+                    <Textarea
+                        mt={3}
+                        value={solverMetadata.formula}
+                        onChange={handleProblemChange}
+                        placeholder='Formula'
+                    />
+                </SectionCard> */}
 
                 {
                     hasSolution ? <SectionCard title={'Solution'}>
