@@ -1,11 +1,11 @@
 import { DeleteIcon } from "@chakra-ui/icons";
-import { 
+import {
+    Button,
     HStack,
-    IconButton, 
-    Input, 
-    Radio, 
-    RadioGroup, 
-    Stack, 
+    IconButton,
+    Input,
+    Radio,
+    RadioGroup, Select,
     Textarea,
     useColorModeValue
 } from "@chakra-ui/react"
@@ -16,6 +16,8 @@ import ProblemSolveVariantType from "~/types/solve/problem-solve-variant-type";
 import SectionCard from "../problems/section-card"
 
 export default function ProblemSolveSection(props: any) {
+    const buttonVariant = useColorModeValue('solid', 'outline');
+
     const {solverMetadata, setSolverMetadata} = props;
     const emptySolverMetadata = {
         type: ProblemSolveType.FORMULA,
@@ -23,7 +25,7 @@ export default function ProblemSolveSection(props: any) {
         correct: null,
         formula: null
     };
-    
+
     const setType = (type: any) => {
         const _solverMetadata = {...emptySolverMetadata, type};
 
@@ -32,7 +34,7 @@ export default function ProblemSolveSection(props: any) {
 
     const handleFormulaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         const _solverMetadata = {...solverMetadata, formula: e.target.value};
-        
+
         setSolverMetadata(_solverMetadata);
     }
 
@@ -41,13 +43,13 @@ export default function ProblemSolveSection(props: any) {
         const _solverMetadata = {
             ...solverMetadata,
             correct: {
-                type: ProblemSolveVariantType.NUMBER, 
-                number: input ? parseInt(e.target.value) : null, 
-                string: null, 
+                type: ProblemSolveVariantType.NUMBER,
+                number: input ? parseInt(e.target.value) : null,
+                string: null,
                 index: null
             }
         };
-        
+
         setSolverMetadata(_solverMetadata);
     }
 
@@ -63,7 +65,7 @@ export default function ProblemSolveSection(props: any) {
     const setCorrectVariant = (variant: any) => {
         let _solverMetadata = {...solverMetadata};
         _solverMetadata.correct.index = parseInt(variant);
-        
+
         setSolverMetadata(_solverMetadata);
     }
 
@@ -84,7 +86,7 @@ export default function ProblemSolveSection(props: any) {
             string: "",
             index: null
         });
-        
+
         setSolverMetadata(_solverMetadata);
     }
 
@@ -101,51 +103,42 @@ export default function ProblemSolveSection(props: any) {
                 index: 0
             }
         }
-        
+
         setSolverMetadata(_solverMetadata);
     }
 
     const solveContent = () => {
-        if(solverMetadata.type === ProblemSolveType.FORMULA) {
-            return (
-                <div>
+        switch (solverMetadata.type) {
+            case ProblemSolveType.FORMULA:
+                return <div>
                     <ReactKatex breakLine={true} strict={false} children={`$${solverMetadata.formula ?? ''}$`}></ReactKatex>
                     <Textarea
                         mt={3}
                         onChange={handleFormulaChange}
                         placeholder='Formula...'
                     />
-                </div>
-            )
-        } else if(solverMetadata.type === ProblemSolveType.CT_A) {
-            return (
-                <div>
-                    <IconButton
-                        mt={3}
-                        size={'sm'}
-                        variant={useColorModeValue('solid', 'outline')}
-                        colorScheme='brand'
-                        aria-label='Add new variant'
-                        icon={<IoPencilSharp />}
-                        onClick={() => addVariant()}
-                    />
+                </div>;
+            case ProblemSolveType.CT_A:
+                const variants = solverMetadata?.variants ?? [];
 
-                    <RadioGroup 
-                        onChange={setCorrectVariant} 
+                return <>
+                    <RadioGroup
+                        onChange={setCorrectVariant}
                         value={solverMetadata.correct ? solverMetadata.correct.index : 0}>
                         {
-                            solverMetadata.variants.map((variant: any, index: number) => 
+                            variants.map((variant: any, index: number) =>
                                 <HStack key={index} mt={2}>
                                     <Radio value={index} />
-                                    <Input 
-                                        maxW='35%'
-                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleVariantChange(e, index)} 
+                                    <Input
+                                        maxW={300}
+                                        defaultValue={variant.string}
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleVariantChange(e, index)}
                                         placeholder='Variant...' />
                                     <IconButton
                                         mt={3}
                                         size={'sm'}
-                                        variant={useColorModeValue('solid', 'outline')}
-                                        colorScheme='brand'
+                                        variant={buttonVariant}
+                                        colorScheme='red'
                                         aria-label='Delete variant'
                                         icon={<DeleteIcon />}
                                         onClick={() => removeVariant(index)}
@@ -154,30 +147,39 @@ export default function ProblemSolveSection(props: any) {
                             )
                         }
                     </RadioGroup>
-                </div>
-            )
-        } else if(solverMetadata.type === ProblemSolveType.CT_B) {
-            return (
-                <div>
-                    <Input
-                        mt={3} 
-                        type='number' 
-                        onChange={handleNumberChange} 
-                        placeholder='Number...' />
-                </div>
-            )
+                    <Button
+                        mt={3}
+                        size={'sm'}
+                        variant={buttonVariant}
+                        colorScheme='brand'
+                        aria-label='Add new variant'
+                        leftIcon={<IoPencilSharp />}
+                        disabled={!(variants.slice(-1)[0]?.string?.length > 0 || variants.length === 0)}
+                        onClick={() => addVariant()}
+                    >
+                        Add new option
+                    </Button>
+                </>;
+            case ProblemSolveType.CT_B:
+                return <Input
+                    maxW={300}
+                    defaultValue={solverMetadata.correct?.number}
+                    mt={3}
+                    type='number'
+                    onChange={handleNumberChange}
+                    placeholder='Number...' />;
+            default:
+                return <>Unknown type</>;
         }
     }
 
     return (
         <SectionCard title={'Solve'}>
-            <RadioGroup onChange={setType} value={solverMetadata.type}>
-                <Stack direction='row'>
-                    <Radio value={ProblemSolveType.FORMULA}>Formula</Radio>
-                    <Radio value={ProblemSolveType.CT_A}>CT-A</Radio>
-                    <Radio value={ProblemSolveType.CT_B}>CT-B</Radio>
-                </Stack>
-            </RadioGroup>
+            <Select onChange={(e) => setType(e.target.value)} value={solverMetadata.type}>
+                <option value={ProblemSolveType.FORMULA}>Formula</option>
+                <option value={ProblemSolveType.CT_A}>ЦТ (часть A)</option>
+                <option value={ProblemSolveType.CT_B}>ЦТ (часть B)</option>
+            </Select>
 
             {solveContent()}
         </SectionCard>
