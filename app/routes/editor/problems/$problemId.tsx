@@ -1,7 +1,7 @@
 import type {ActionFunction, LoaderFunction, MetaFunction} from "@remix-run/cloudflare";
+import {json, redirect} from "@remix-run/cloudflare";
 import tokenCheck from "~/services/token-check";
 import {GraphQLClient} from '@pkasila/graphql-request-fetch';
-import {json, redirect} from "@remix-run/cloudflare";
 import {
     Box,
     Button,
@@ -10,26 +10,31 @@ import {
     Container,
     Heading,
     Image,
-    Radio, RadioGroup,
+    Radio,
+    RadioGroup,
     SimpleGrid,
     Skeleton,
     Stack,
     Tag as ChakraTag,
     Textarea,
     useColorModeValue,
-    Wrap, WrapItem
+    Wrap,
+    WrapItem
 } from "@chakra-ui/react";
 import ReactKatex from "@pkasila/react-katex";
 import {useLoaderData, useSubmit, useTransition} from "@remix-run/react";
-import { ClientOnly } from "remix-utils";
+import {ClientOnly} from "remix-utils";
 import type Problem from "~/types/problem";
 import type Tag from "~/types/problem";
-import {Fragment, useState} from "react";
+import {useState} from "react";
 import SectionCard from "~/components/problems/section-card";
 import ProblemType from "~/types/problem-type";
 import TagsSelector from "~/components/editor/tags-selector.client";
+import ProblemSolveSection from "~/components/editor/problem-solve";
+import type ProblemSolve from "~/types/solve/problem-solve";
+import ProblemSolveType from "~/types/solve/problem-solve-type";
 
-export const action: ActionFunction = async ({ request, params }) => {
+export const action: ActionFunction = async ({request, params}) => {
     const data = await request.formData();
 
     const user = await tokenCheck(request);
@@ -48,7 +53,7 @@ export const action: ActionFunction = async ({ request, params }) => {
         return redirect(redirectPath);
     }
 
-    switch(request.method.toLowerCase()) {
+    switch (request.method.toLowerCase()) {
         case 'delete':
             query = `mutation ProblemDelete($id: ID!) {
     deleteProblem(id: $id)
@@ -58,11 +63,14 @@ export const action: ActionFunction = async ({ request, params }) => {
             switch (data.get('act')) {
                 case 'update':
                     const solution = data.get('solution');
+                    const solverMetadata = JSON.parse(data.get('solverMetadata') as string);
+
                     variables["input"] = {
                         problem: data.get('problem'),
                         solution: solution === '' ? null : solution,
                         type: data.get('type'),
-                        tagIds: (data.get('tags') as string).split(',').map(id => parseInt(id, 10))
+                        tagIds: (data.get('tags') as string).split(',').map(id => parseInt(id, 10)),
+                        solverMetadata: solverMetadata
                     };
                     query = `mutation ProblemUpdate($id: ID!, $input: ProblemInput) {
     updateProblem(id: $id, input: $input) {
@@ -75,7 +83,8 @@ export const action: ActionFunction = async ({ request, params }) => {
                         problem: 'New problem',
                         solution: null,
                         type: ProblemType.STATIC,
-                        tagIds: []
+                        tagIds: [],
+                        solverMetadata: null
                     };
                     query = `mutation ProblemAdd($input: ProblemInput) {
     addProblem(input: $input) {
@@ -89,30 +98,30 @@ export const action: ActionFunction = async ({ request, params }) => {
             break;
         case 'put':
             switch (data.get('act')) {
-            case 'publish':
-                variables["published"] = data.get('published') === 'true';
-                query = `mutation ProblemPublish($id: ID!, $published: Boolean) {
+                case 'publish':
+                    variables["published"] = data.get('published') === 'true';
+                    query = `mutation ProblemPublish($id: ID!, $published: Boolean) {
     publishProblem(id: $id, published: $published) {
         id
     }
 }`;
-                break;
-            case 'own':
-                query = `mutation ProblemOwn($id: ID!) {
+                    break;
+                case 'own':
+                    query = `mutation ProblemOwn($id: ID!) {
     takeProblem(id: $id) {
         id
     }
 }`;
-                break;
-            default:
-                return redirect(redirectPath);
+                    break;
+                default:
+                    return redirect(redirectPath);
             }
             break;
         default:
             return redirect(redirectPath);
     }
 
-    const client = new GraphQLClient('https://coreapi-sf.pkasila.net/graphql', { headers });
+    const client = new GraphQLClient('https://coreapi-sf.pkasila.net/graphql', {headers});
     const results: any = await client.request(query, variables);
 
     if (params.problemId === 'new') {
@@ -143,6 +152,22 @@ export const loader: LoaderFunction = async ({request, params}) => {
             color
             title
         }
+        solverMetadata {
+            type
+            variants {
+                type
+                number
+                string
+                index
+            }
+            correct {
+                type
+                number
+                string
+                index
+            }
+            formula
+        }
     }
     tags {
         id
@@ -160,14 +185,14 @@ export const loader: LoaderFunction = async ({request, params}) => {
         headers['Authorization'] = `Bearer ${user?._token.accessToken}`;
     }
 
-    const client = new GraphQLClient('https://coreapi-sf.pkasila.net/graphql', { headers });
+    const client = new GraphQLClient('https://coreapi-sf.pkasila.net/graphql', {headers});
     const results = await client.request(query, {
         id: params.problemId
     });
 
     const url = new URL(request.url);
 
-    return json({results, url: url.pathname+url.search});
+    return json({results, url: url.pathname + url.search});
 };
 
 export const meta: MetaFunction = ({data}) => {
@@ -180,12 +205,14 @@ export const meta: MetaFunction = ({data}) => {
 export default function EditorProblem() {
     const badgeVariant = useColorModeValue('solid', 'outline');
 
-    const {results, url} = useLoaderData() as {results: {problem: Problem, tags: Tag[]}, url: string};
+    const {results, url} = useLoaderData() as { results: { problem: Problem, tags: Tag[] }, url: string };
     const [type, setType] = useState(results.problem.type);
     const [tags, setTags] = useState(results.problem.tags ?? []);
     const [problem, setProblem] = useState(results.problem.problem);
     const [solution, setSolution] = useState(results.problem.solution ?? '');
     const [hasSolution, setHasSolution] = useState(results.problem.solution !== null && results.problem.solution !== '');
+    const [solverMetadata, setSolverMetadata] = useState<ProblemSolve | null>(results.problem.solverMetadata ?? null);
+    const [hasSolverMetadata, setHasSolverMetadata] = useState(results.problem.solverMetadata?.type !== null);
 
     const handleProblemChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         const inputValue = e.target.value;
@@ -197,6 +224,13 @@ export default function EditorProblem() {
         setSolution(inputValue);
     }
 
+    const handleHasSolverMetadataChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setHasSolverMetadata(e.target.checked);
+        if (!solverMetadata?.type) {
+            setSolverMetadata(e.target.checked ? {type: ProblemSolveType.FORMULA} : null);
+        }
+    }
+
     const submit = useSubmit();
     const transition = useTransition();
 
@@ -205,14 +239,19 @@ export default function EditorProblem() {
             setSolution('');
         }
 
+        if (!hasSolverMetadata) {
+            setSolverMetadata(null);
+        }
+
         submit({
             url,
             act: 'update',
             problem,
             solution: hasSolution ? solution : '',
+            solverMetadata: JSON.stringify((hasSolverMetadata && solverMetadata?.type) ? solverMetadata : null),
             type,
             tags: tags.map(t => `${t.id}`).join(',')
-        }, { method: "post", action: `/editor/problems/${results.problem.id}` });
+        }, {method: "post", action: `/editor/problems/${results.problem.id}`});
     }
 
     const publish = (published: boolean) => {
@@ -220,27 +259,29 @@ export default function EditorProblem() {
             url,
             act: 'publish',
             published: published ? 'true' : 'false'
-        }, { method: "put", action: `/editor/problems/${results.problem.id}` });
+        }, {method: "put", action: `/editor/problems/${results.problem.id}`});
     }
 
     const takeOwnership = () => {
         submit({
             url,
             act: 'own'
-        }, { method: "put", action: `/editor/problems/${results.problem.id}` });
+        }, {method: "put", action: `/editor/problems/${results.problem.id}`});
     }
 
     const remove = () => {
         submit({
             url: '/editor/problems'
-        }, { method: "delete", action: `/editor/problems/${results.problem.id}` });
+        }, {method: "delete", action: `/editor/problems/${results.problem.id}`});
     }
 
     const hasChanges: boolean = problem !== results.problem.problem ||
-                                type !== results.problem.type ||
-                                JSON.stringify(tags.map(t => t.id).sort()) !== JSON.stringify(results.problem.tags?.map(t => t.id).sort() ?? []) ||
-                                solution !== (results.problem.solution ?? '') ||
-                                hasSolution !== (results.problem.solution !== null && results.problem.solution !== '');
+        type !== results.problem.type ||
+        JSON.stringify(tags.map(t => t.id).sort()) !== JSON.stringify(results.problem.tags?.map(t => t.id).sort() ?? []) ||
+        solution !== (results.problem.solution ?? '') ||
+        hasSolution !== (results.problem.solution !== null && results.problem.solution !== '') ||
+        JSON.stringify(solverMetadata) !== JSON.stringify(results.problem.solverMetadata) ||
+        hasSolverMetadata !== (results.problem.solverMetadata?.type !== null);
 
     return <>
         <Container maxW={'5xl'} as={'article'}>
@@ -266,6 +307,9 @@ export default function EditorProblem() {
                             </Stack>
                         </RadioGroup>
                         <Stack direction='row' spacing={5}>
+                            <Checkbox isChecked={hasSolverMetadata} onChange={handleHasSolverMetadataChange}>
+                                Add Solve
+                            </Checkbox>
                             <Checkbox isChecked={hasSolution} onChange={(e) => setHasSolution(e.target.checked)}>
                                 Add Solution
                             </Checkbox>
@@ -289,6 +333,12 @@ export default function EditorProblem() {
                         placeholder='Problem...'
                     />
                 </SectionCard>
+
+                {
+                    hasSolverMetadata ? <ProblemSolveSection
+                        solverMetadata={solverMetadata}
+                        setSolverMetadata={(_solverMetadata: ProblemSolve) => setSolverMetadata(_solverMetadata)} /> : null
+                }
 
                 {
                     hasSolution ? <SectionCard title={'Solution'}>
@@ -333,9 +383,9 @@ export default function EditorProblem() {
                         }
                     </Wrap>
                     <Box height={'200px'} style={{overflowY: 'scroll'}} mt={4}>
-                        <ClientOnly fallback={<Skeleton height='200px' />}
+                        <ClientOnly fallback={<Skeleton height='200px'/>}
                                     children={() => <TagsSelector tags={results.tags} selected={tags}
-                                                                  onChange={tags => setTags(tags)}></TagsSelector>} />
+                                                                  onChange={tags => setTags(tags)}></TagsSelector>}/>
                     </Box>
                 </SectionCard>
             </Stack>
@@ -345,7 +395,7 @@ export default function EditorProblem() {
             position={'sticky'} bottom={0}
             w={'full'}
             bg={useColorModeValue('white', 'gray.900')}
-            borderTopWidth='1px'
+            borderTop={1}
             mt={4}
             overflow={'hidden'}>
             <Container maxW={'5xl'} py={4}>
@@ -364,9 +414,9 @@ export default function EditorProblem() {
                     </Button>
                     {
                         results.problem.createdBy == null ? <Button colorScheme='blue'
-                                                            onClick={takeOwnership}
-                                                            disabled={transition.state !== 'idle'}
-                                                            isLoading={transition.state !== 'idle'}>
+                                                                    onClick={takeOwnership}
+                                                                    disabled={transition.state !== 'idle'}
+                                                                    isLoading={transition.state !== 'idle'}>
                             Take ownership
                         </Button> : null
                     }

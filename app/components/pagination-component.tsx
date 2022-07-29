@@ -34,8 +34,6 @@ export default function PaginationComponent(props: any) {
             navigatePage(page.length ? (parseInt(page, 10) - 1) : 0)
         };
 
-        console.log('en', enabled);
-
         return (
             <form onSubmit={enabled ? navigate : (event) => {event.preventDefault()}}>
                 <InputGroup>

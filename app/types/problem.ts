@@ -1,5 +1,6 @@
 import type ProblemType from "~/types/problem-type";
 import Tag from "~/types/Tag";
+import ProblemSolve from "./solve/problem-solve";
 
 export default interface Problem {
     id: number;
@@ -14,4 +15,5 @@ export default interface Problem {
     modifiedBy?: string;
     modifiedDate: number;
     tags?: Tag[];
+    solverMetadata?: ProblemSolve;
 }
