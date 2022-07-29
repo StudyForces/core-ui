@@ -11,12 +11,14 @@ import {
 } from "@chakra-ui/react"
 import ReactKatex from "@pkasila/react-katex"
 import { IoPencilSharp } from "react-icons/io5";
+import ProblemSolveType from "~/types/solve/problem-solve-type";
+import ProblemSolveVariantType from "~/types/solve/problem-solve-variant-type";
 import SectionCard from "../problems/section-card"
 
-export default function ProblemSolve(props: any) {
+export default function ProblemSolveSection(props: any) {
     const {solverMetadata, setSolverMetadata} = props;
     const emptySolverMetadata = {
-        type: "FORMULA",
+        type: ProblemSolveType.FORMULA,
         variants: [],
         correct: null,
         formula: null
@@ -39,7 +41,7 @@ export default function ProblemSolve(props: any) {
         const _solverMetadata = {
             ...solverMetadata,
             correct: {
-                type: "NUMBER", 
+                type: ProblemSolveVariantType.NUMBER, 
                 number: input ? parseInt(e.target.value) : null, 
                 string: null, 
                 index: null
@@ -69,7 +71,7 @@ export default function ProblemSolve(props: any) {
         let _solverMetadata = {...solverMetadata};
         if(_solverMetadata.variants.length === 0) {
             _solverMetadata.correct = {
-                type: "INDEX",
+                type: ProblemSolveVariantType.INDEX,
                 number: null,
                 string: null,
                 index: 0
@@ -77,7 +79,7 @@ export default function ProblemSolve(props: any) {
         }
 
         _solverMetadata.variants.push({
-            type: "STRING",
+            type: ProblemSolveVariantType.STRING,
             number: null,
             string: "",
             index: null
@@ -93,7 +95,7 @@ export default function ProblemSolve(props: any) {
             _solverMetadata.correct = null;
         } else {
             _solverMetadata.correct = {
-                type: "INDEX",
+                type: ProblemSolveVariantType.INDEX,
                 number: null,
                 string: null,
                 index: 0
@@ -104,19 +106,18 @@ export default function ProblemSolve(props: any) {
     }
 
     const solveContent = () => {
-        if(solverMetadata.type === 'FORMULA') {
+        if(solverMetadata.type === ProblemSolveType.FORMULA) {
             return (
                 <div>
-                    <ReactKatex breakLine={true} strict={false} children={solverMetadata.formula}></ReactKatex>
+                    <ReactKatex breakLine={true} strict={false} children={`$${solverMetadata.formula ?? ''}$`}></ReactKatex>
                     <Textarea
                         mt={3}
-                        value={solverMetadata.formula ?? ''}
                         onChange={handleFormulaChange}
                         placeholder='Formula...'
                     />
                 </div>
             )
-        } else if(solverMetadata.type === 'CT_A') {
+        } else if(solverMetadata.type === ProblemSolveType.CT_A) {
             return (
                 <div>
                     <IconButton
@@ -155,7 +156,7 @@ export default function ProblemSolve(props: any) {
                     </RadioGroup>
                 </div>
             )
-        } else if(solverMetadata.type === 'CT_B') {
+        } else if(solverMetadata.type === ProblemSolveType.CT_B) {
             return (
                 <div>
                     <Input
@@ -172,9 +173,9 @@ export default function ProblemSolve(props: any) {
         <SectionCard title={'Solve'}>
             <RadioGroup onChange={setType} value={solverMetadata.type}>
                 <Stack direction='row'>
-                    <Radio value='FORMULA'>Formula</Radio>
-                    <Radio value='CT_A'>CT-A</Radio>
-                    <Radio value='CT_B'>CT-B</Radio>
+                    <Radio value={ProblemSolveType.FORMULA}>Formula</Radio>
+                    <Radio value={ProblemSolveType.CT_A}>CT-A</Radio>
+                    <Radio value={ProblemSolveType.CT_B}>CT-B</Radio>
                 </Stack>
             </RadioGroup>
 

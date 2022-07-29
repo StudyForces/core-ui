@@ -28,7 +28,8 @@ import {Fragment, useState} from "react";
 import SectionCard from "~/components/problems/section-card";
 import ProblemType from "~/types/problem-type";
 import TagsSelector from "~/components/editor/tags-selector.client";
-import ProblemSolve from "~/components/editor/problem-solve";
+import ProblemSolveSection from "~/components/editor/problem-solve";
+import ProblemSolve from "~/types/solve/problem-solve";
 
 const emptySolverMetadata = {
     type: "FORMULA",
@@ -67,7 +68,7 @@ export const action: ActionFunction = async ({ request, params }) => {
                 case 'update':
                     const solution = data.get('solution');
                     const solverMetadata = JSON.parse(data.get('solverMetadata') as string);
-                    
+                    console.log(solverMetadata);
                     variables["input"] = {
                         problem: data.get('problem'),
                         solution: solution === '' ? null : solution,
@@ -192,7 +193,7 @@ export const loader: LoaderFunction = async ({request, params}) => {
     const results = await client.request(query, {
         id: params.problemId
     });
-
+    console.log(results);
     const url = new URL(request.url);
 
     return json({results, url: url.pathname+url.search});
@@ -322,9 +323,9 @@ export default function EditorProblem() {
                     />
                 </SectionCard>
 
-                <ProblemSolve 
+                <ProblemSolveSection 
                     solverMetadata={solverMetadata} 
-                    setSolverMetadata={(_solverMetadata: any) => setSolverMetadata(_solverMetadata)} />
+                    setSolverMetadata={(_solverMetadata: ProblemSolve) => setSolverMetadata(_solverMetadata)} />
 
                 {
                     hasSolution ? <SectionCard title={'Solution'}>
