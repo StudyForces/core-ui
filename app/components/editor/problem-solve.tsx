@@ -44,7 +44,7 @@ export default function ProblemSolveSection(props: any) {
             ...solverMetadata,
             correct: {
                 type: ProblemSolveVariantType.NUMBER,
-                number: input ? parseInt(e.target.value) : null,
+                number: input ? parseFloat(e.target.value) : null,
                 string: null,
                 index: null
             }
