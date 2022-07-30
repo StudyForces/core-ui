@@ -60,7 +60,6 @@ export default function Navbar({user}: { user?: User }) {
                             to={'/'}
                             ml={2}
                             textAlign={useBreakpointValue({base: 'center', md: 'left'})}
-                            fontFamily={'heading'}
                             fontWeight={600}
                             color={useColorModeValue('gray.800', 'white')}>
                             StudyForces

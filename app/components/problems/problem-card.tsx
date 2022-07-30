@@ -35,12 +35,12 @@ export default function ProblemCard({problem}: { problem: Problem }) {
 
                     <Heading
                         noOfLines={1}
-                        fontSize={'2xl'}
-                        fontFamily={'body'}>
+                        fontSize={'xl'}>
                         <ReactKatex strict={false} children={problem.problem}></ReactKatex>
                     </Heading>
 
-                    <Text color={'gray.500'}
+                    <Text color={useColorModeValue('gray.500', 'gray.400')}
+                          fontFamily={'serif'}
                           noOfLines={3}>
                         <ReactKatex strict={false} children={problem.problem}></ReactKatex>
                     </Text>
@@ -50,8 +50,8 @@ export default function ProblemCard({problem}: { problem: Problem }) {
                        justify={'flex-end'} flex={0}>
                     <Box noOfLines={1}>
                         {
-                            problem.tags?.slice(0, 2).map(tag => <Fragment key={tag.id}>
-                                <Tag colorScheme={tag.color} variant={badgeVariant}>
+                            problem.tags?.slice(0, 3).map(tag => <Fragment key={tag.id}>
+                                <Tag colorScheme={tag.color} variant={badgeVariant} size={'sm'}>
                                     {tag.title}
                                 </Tag>
                                 {' '}
@@ -62,6 +62,7 @@ export default function ProblemCard({problem}: { problem: Problem }) {
                     <Spacer/>
 
                     <Button variant={'link'}
+                            size={'sm'}
                             as={RemixLink}
                             to={`/problems/${problem.id}`}
                             color={'brand.400'}

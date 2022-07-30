@@ -1,4 +1,4 @@
-import {Box, chakra, Flex, Stack, Image, Link, useColorModeValue, Spinner} from "@chakra-ui/react";
+import {Box, chakra, Flex, Stack, Image, Link, useColorModeValue, Spinner, Heading, Text} from "@chakra-ui/react";
 import {Link as RemixLink, useSubmit, useTransition} from '@remix-run/react';
 import type User from "~/services/user";
 
@@ -31,7 +31,7 @@ export default function CallAction({user}: { user?: User }) {
                 md: 20,
             }}
         >
-            <chakra.h2
+            <Heading
                 fontSize={{
                     base: "3xl",
                     sm: "4xl",
@@ -58,8 +58,8 @@ export default function CallAction({user}: { user?: User }) {
                 >
                     Start using StudyForces now
                 </chakra.span>
-            </chakra.h2>
-            <chakra.p
+            </Heading>
+            <Text
                 mb={6}
                 fontSize={{
                     base: "lg",
@@ -73,7 +73,7 @@ export default function CallAction({user}: { user?: User }) {
                 StudyForces is a platform with a modern problem and solution catalog and
                 a superior Q&A section to ask and help people on topics related to Physics,
                 Maths and other subjects.
-            </chakra.p>
+            </Text>
             <Stack
                 direction={{
                     base: "column",
