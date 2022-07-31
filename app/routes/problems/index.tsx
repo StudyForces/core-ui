@@ -56,8 +56,7 @@ export default function ProblemsIndex() {
         <Heading
             mt={2}
             mb={6}
-            fontSize={'4xl'}
-            fontFamily={'body'}>
+            fontSize={'3xl'}>
             Problems
         </Heading>
         <SimpleGrid

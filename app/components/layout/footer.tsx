@@ -31,7 +31,6 @@ export default function Footer() {
                     <Stack spacing={6}>
                         <Box>
                             <Text
-                                fontFamily={'heading'}
                                 fontWeight={600}
                                 color={useColorModeValue('gray.700', 'white')}>
                                 StudyForces

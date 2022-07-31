@@ -1,6 +1,6 @@
 import type ProblemType from "~/types/problem-type";
-import Tag from "~/types/Tag";
-import ProblemSolve from "./solve/problem-solve";
+import type Tag from "~/types/Tag";
+import type ProblemSolve from "./solve/problem-solve";
 
 export default interface Problem {
     id: number;

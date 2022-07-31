@@ -1,7 +1,15 @@
 import {extendTheme} from "@chakra-ui/react"
 
+const appleSystem = "-apple-system, BlinkMacSystemFont, Roboto, Open Sans, Helvetica Neue, sans-serif";
+
 const theme = extendTheme({
     useSystemColorMode: true,
+    fonts: {
+        body: appleSystem,
+        heading: "'Roboto Slab', serif",
+        mono: "Menlo, monospace",
+        serif: "'Roboto Slab', serif",
+    },
     colors: {
         brand: {
             50: "#f0f6fc",
