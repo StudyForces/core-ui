@@ -30,7 +30,7 @@ import {useState} from "react";
 import SectionCard from "~/components/problems/section-card";
 import ProblemType from "~/types/problem-type";
 import TagsSelector from "~/components/editor/tags-selector.client";
-import ProblemSolveSection from "~/components/editor/problem-solve";
+import EditProblemSolve from "~/components/editor/edit-problem-solve";
 import type ProblemSolve from "~/types/solve/problem-solve";
 import ProblemSolveType from "~/types/solve/problem-solve-type";
 
@@ -211,7 +211,10 @@ export default function EditorProblem() {
     const [problem, setProblem] = useState(results.problem.problem);
     const [solution, setSolution] = useState(results.problem.solution ?? '');
     const [hasSolution, setHasSolution] = useState(results.problem.solution !== null && results.problem.solution !== '');
-    const [solverMetadata, setSolverMetadata] = useState<ProblemSolve | null>(results.problem.solverMetadata ?? null);
+
+    // TODO: find a better solution to solver metadata object copying
+    const [solverMetadata, setSolverMetadata] = useState<ProblemSolve | null>(JSON.parse(JSON.stringify(results.problem.solverMetadata ?? 'null')));
+
     const [hasSolverMetadata, setHasSolverMetadata] = useState(results.problem.solverMetadata?.type !== null);
 
     const handleProblemChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -335,8 +338,8 @@ export default function EditorProblem() {
                 </SectionCard>
 
                 {
-                    hasSolverMetadata ? <ProblemSolveSection
-                        solverMetadata={solverMetadata}
+                    hasSolverMetadata ? <EditProblemSolve
+                        solverMetadata={Object.assign({}, solverMetadata)}
                         setSolverMetadata={(_solverMetadata: ProblemSolve) => setSolverMetadata(_solverMetadata)} /> : null
                 }
 

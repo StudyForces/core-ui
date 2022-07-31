@@ -1,27 +1,84 @@
-import type {LoaderFunction, MetaFunction} from "@remix-run/cloudflare";
-import {useLoaderData} from "@remix-run/react";
+import type {ActionFunction, LoaderFunction, MetaFunction} from "@remix-run/cloudflare";
 import {json} from "@remix-run/cloudflare";
+import {useLoaderData} from "@remix-run/react";
 import {GraphQLClient} from '@pkasila/graphql-request-fetch';
 import {
-    Heading,
-    Container,
-    chakra,
-    Stack,
-    useColorModeValue,
-    Image,
-    Box,
-    SimpleGrid,
-    Tag,
-    Wrap,
-    WrapItem,
     Accordion,
-    AccordionItem,
     AccordionButton,
-    AccordionIcon, AccordionPanel
+    AccordionIcon,
+    AccordionItem,
+    AccordionPanel,
+    Box,
+    chakra,
+    Container,
+    Heading,
+    Image,
+    SimpleGrid,
+    Stack,
+    Tag,
+    useColorModeValue,
+    Wrap,
+    WrapItem
 } from "@chakra-ui/react";
 import type Problem from "~/types/problem";
 import ReactKatex from "@pkasila/react-katex";
 import Footer from "~/components/layout/footer";
+import SolveProblem from "~/components/problems/solve-problem";
+import ProblemSolveType from "~/types/solve/problem-solve-type";
+import ProblemSolve from "~/types/solve/problem-solve";
+import ProblemSolveVariantType from "~/types/solve/problem-solve-variant-type";
+
+export const action: ActionFunction = async ({request, params}) => {
+    const query = `query ProblemSolve($id: ID!) {
+    problem: problemById(id: $id) {
+        solution
+        solverMetadata {
+            type
+            correct {
+                type
+                string
+                number
+                index
+            }
+            formula
+        }
+    }
+}`
+    const client = new GraphQLClient('https://coreapi-sf.pkasila.net/graphql');
+    const results: {problem: Problem} = await client.request(query, {
+        id: params.problemId
+    }, { cache: false });
+
+    const data: ProblemSolve = JSON.parse((await request.formData()).get('solved') as (string | null) ?? '{}' as string);
+
+    switch(results.problem.solverMetadata?.type) {
+        case ProblemSolveType.CT_A:
+            return json({
+                correct: data.correct?.index === results.problem.solverMetadata.correct?.index
+            });
+        case ProblemSolveType.CT_B:
+            switch(results.problem.solverMetadata?.correct?.type) {
+                case ProblemSolveVariantType.STRING:
+                    return json({
+                        correct: data.correct?.string === results.problem.solverMetadata.correct?.string
+                    });
+                case ProblemSolveVariantType.NUMBER:
+                    return json({
+                        correct: data.correct?.number === results.problem.solverMetadata.correct?.number
+                    });
+            }
+            break;
+        case ProblemSolveType.FORMULA:
+            // TODO: needs to be implemented
+            return json({
+                correct: false
+            });
+    }
+
+    return json({
+        correct: false
+    });
+}
 
 export const loader: LoaderFunction = async ({request, params}) => {
     const query = `query ProblemView($id: ID!) {
@@ -48,7 +105,9 @@ export const loader: LoaderFunction = async ({request, params}) => {
                 string
                 number
             }
-            formula
+            correct {
+                type
+            }
         }
     }
 }`
@@ -152,15 +211,7 @@ export default function ProblemView() {
                 }
 
                 {
-                    problem.solverMetadata?.type ? <Box>
-                        <Heading
-                            noOfLines={1}
-                            mt={2}
-                            mb={4}
-                            fontSize={'xl'}>
-                            Solve
-                        </Heading>
-                    </Box> : null
+                    problem.solverMetadata?.type ? <SolveProblem problem={problem}></SolveProblem> : null
                 }
 
                 {
