@@ -33,6 +33,7 @@ import TagsSelector from "~/components/editor/tags-selector.client";
 import EditProblemSolve from "~/components/editor/edit-problem-solve";
 import type ProblemSolve from "~/types/solve/problem-solve";
 import ProblemSolveType from "~/types/solve/problem-solve-type";
+import EquationInserter from "~/components/equation-inserter";
 
 export const action: ActionFunction = async ({request, params}) => {
     const data = await request.formData();
@@ -328,11 +329,12 @@ export default function EditorProblem() {
                 </SectionCard>
 
                 <SectionCard title={'Problem'}>
-                    <Box fontFamily={'serif'}>
+                    <Box fontFamily={'serif'} mb={2}>
                         <ReactKatex breakLine={true} strict={false} children={problem}></ReactKatex>
                     </Box>
+                    <EquationInserter />
                     <Textarea
-                        mt={3}
+                        mt={1}
                         value={problem}
                         onChange={handleProblemChange}
                         placeholder='Problem...'
@@ -347,11 +349,12 @@ export default function EditorProblem() {
 
                 {
                     hasSolution ? <SectionCard title={'Solution'}>
-                        <Box fontFamily={'serif'}>
+                        <Box fontFamily={'serif'} mb={2}>
                             <ReactKatex breakLine={true} strict={false} children={solution}></ReactKatex>
                         </Box>
+                        <EquationInserter />
                         <Textarea
-                            mt={3}
+                            mt={1}
                             value={solution}
                             onChange={handleSolutionChange}
                             placeholder='Solution...'
