@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 
 import {
     Box,
-    Container,
+    Container, Heading,
     Link,
     SimpleGrid,
     Stack,
@@ -30,14 +30,18 @@ export default function Footer() {
                     spacing={8}>
                     <Stack spacing={6}>
                         <Box>
-                            <Text
+                            <Heading
                                 fontWeight={600}
-                                color={useColorModeValue('gray.700', 'white')}>
+                                fontSize="lg"
+                                color={'gray.700'}
+                                _dark={{
+                                    color: 'white'
+                                }}>
                                 StudyForces
-                            </Text>
+                            </Heading>
                         </Box>
                         <Text fontSize={'sm'}>
-                            © 2022 StudyForces. All rights reserved
+                            © {new Date().getFullYear()} StudyForces. All rights reserved
                         </Text>
                     </Stack>
                     <Stack align={'flex-start'}>

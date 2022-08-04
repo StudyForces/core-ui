@@ -5,6 +5,7 @@ import {
     DrawerContent,
     DrawerOverlay,
     Flex,
+    Heading,
     Icon, IconButton, Input, InputGroup, InputLeftElement, Stack, Text, useColorMode,
     useColorModeValue,
     useDisclosure
@@ -112,18 +113,20 @@ export default function ContentLayout({children, user}: { children: ReactNode, u
             {...props}
         >
             <Flex px="4" py="5" align="center">
-                <Text
+                <Heading
                     as={RemixLink} to={'/'}
-                    fontSize="2xl"
+                    fontSize="lg"
                     ml="2"
-                    color="brand.500"
-                    _dark={{
-                        color: "white",
-                    }}
                     fontWeight="semibold"
                 >
-                    StudyForces
-                </Text>
+                    StudyForces {' '}
+                    <Text as={'span'}
+                          bgGradient='linear(to-tl, brand.400, brand.500)'
+                          bgClip='text'
+                          _dark={{
+                              bgGradient: 'linear(to-tl, brand.300, brand.400)'
+                          }}>Catalog</Text>
+                </Heading>
             </Flex>
             <Flex
                 direction="column"

@@ -13,7 +13,7 @@ import {
     PopoverContent,
     useColorModeValue,
     useBreakpointValue,
-    useDisclosure, Container, useColorMode,
+    useDisclosure, Container, useColorMode, Heading,
 } from '@chakra-ui/react';
 import {
     HamburgerIcon,
@@ -33,13 +33,17 @@ export default function Navbar({user}: { user?: User }) {
         <Box bg={useColorModeValue('white', 'gray.800')}>
             <Container maxW={'5xl'}>
                 <Flex
-                    color={useColorModeValue('gray.600', 'white')}
+                    color={'gray.600'}
                     minH={'60px'}
                     py={{base: 2}}
                     px={{base: 4}}
                     borderBottom={1}
                     borderStyle={'solid'}
-                    borderColor={useColorModeValue('gray.200', 'gray.900')}
+                    borderColor={'gray.200'}
+                    _dark={{
+                        color: 'white',
+                        borderColor: 'gray.900'
+                    }}
                     align={'center'}>
                     <Flex
                         flex={0}
@@ -54,16 +58,21 @@ export default function Navbar({user}: { user?: User }) {
                             aria-label={'Toggle Navigation'}
                         />
                     </Flex>
-                    <Flex flex={'auto'} justify={'start'}>
-                        <Text
+                    <Flex flex={'auto'} justify={'start'} align={'center'}>
+                        <Heading
                             as={RemixLink}
                             to={'/'}
                             ml={2}
+                            p={0}
                             textAlign={useBreakpointValue({base: 'center', md: 'left'})}
-                            fontWeight={600}
-                            color={useColorModeValue('gray.800', 'white')}>
+                            fontWeight="semibold"
+                            fontSize={'lg'}
+                            color={'gray.800'}
+                            _dark={{
+                                color: 'white'
+                            }}>
                             StudyForces
-                        </Text>
+                        </Heading>
 
                         <Flex display={{base: 'none', md: 'flex'}} ml={10}>
                             <DesktopNav/>
