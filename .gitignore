@@ -8,3 +8,4 @@ node_modules
 /.mf
 .env
 .DS_Store
+/app/aegolius-config.json

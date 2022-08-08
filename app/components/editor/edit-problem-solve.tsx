@@ -21,6 +21,7 @@ import ProblemSolveVariantType from "~/types/solve/problem-solve-variant-type";
 import SectionCard from "../problems/section-card"
 import SolveProblemContent from "~/components/problems/solve-problem/solve-problem-content";
 import type {ChangeEvent} from "react";
+import AegoliusFormulaInput from "~/components/aegolius-formula-input";
 
 export default function EditProblemSolve(props: any) {
     const buttonVariant = useColorModeValue('solid', 'outline');
@@ -39,8 +40,8 @@ export default function EditProblemSolve(props: any) {
         setSolverMetadata(_solverMetadata);
     }
 
-    const handleFormulaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-        const _solverMetadata = {...solverMetadata, formula: e.target.value};
+    const handleFormulaChange = (formula: string) => {
+        const _solverMetadata = {...solverMetadata, formula};
 
         setSolverMetadata(_solverMetadata);
     }
@@ -146,13 +147,7 @@ export default function EditProblemSolve(props: any) {
     const solveContent = () => {
         switch (solverMetadata.type) {
             case ProblemSolveType.FORMULA:
-                return <>
-                    <ReactKatex breakLine={true} strict={false} children={`$${solverMetadata.formula ?? ''}$`}></ReactKatex>
-                    <Textarea
-                        onChange={handleFormulaChange}
-                        placeholder='Formula...'
-                    />
-                </>;
+                return <AegoliusFormulaInput formula={solverMetadata.formula} setFormula={handleFormulaChange} />;
             case ProblemSolveType.CT_A:
                 const variants = solverMetadata?.variants ?? [];
 

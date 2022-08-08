@@ -2,6 +2,7 @@ import type {ActionFunction, LoaderFunction, MetaFunction} from "@remix-run/clou
 import {json} from "@remix-run/cloudflare";
 import {useLoaderData} from "@remix-run/react";
 import {GraphQLClient} from '@pkasila/graphql-request-fetch';
+import aegoliusConfig from "~/aegolius-config.json";
 import {
     Accordion,
     AccordionButton,
@@ -69,9 +70,27 @@ export const action: ActionFunction = async ({request, params}) => {
             }
             break;
         case ProblemSolveType.FORMULA:
-            // TODO: needs to be implemented
+            if (data.formula === null || results.problem.solverMetadata.formula === null) {
+                return json({correct: false});
+            }
+
+            const res = await fetch(`https://aegolius.pkasila.net/api/formulas/compare`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Aegolius ${aegoliusConfig.auth}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({a: data.formula, b: results.problem.solverMetadata.formula})
+            });
+
+            if (!res.ok) {
+                return json({correct: false});
+            }
+
+            const comp: {equal: boolean} = await res.json();
+
             return json({
-                correct: false
+                correct: comp.equal
             });
     }
 

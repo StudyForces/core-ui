@@ -2,6 +2,7 @@ import type SolveProblemProps from "~/components/problems/solve-problem/solve-pr
 import ProblemSolveType from "~/types/solve/problem-solve-type";
 import SolveProblemCtA from "~/components/problems/solve-problem/solve-problem-ct-a";
 import SolveProblemCtB from "~/components/problems/solve-problem/solve-problem-ct-b";
+import SolveProblemFormula from "~/components/problems/solve-problem/solve-problem-formula";
 
 export default function SolveProblemContent({solve, setSolved}: SolveProblemProps) {
     switch(solve.type) {
@@ -11,10 +12,7 @@ export default function SolveProblemContent({solve, setSolved}: SolveProblemProp
             return <SolveProblemCtB solve={solve} setSolved={setSolved}></SolveProblemCtB>;
         case ProblemSolveType.FORMULA:
             // TODO: add formula UI
-            return <>
-                Currently formulas are not implemented due to lack of evaluation APIs.
-                Checking formulas will be available soon.
-            </>;
+            return <SolveProblemFormula solve={solve} setSolved={setSolved}></SolveProblemFormula>;
     }
     return <>Unknown type</>;
 }

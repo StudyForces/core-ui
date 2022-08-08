@@ -20,4 +20,3 @@ route = "https://coreui-sf.pkasila.net/*"
 CLIENT_ID="core"
 CLIENT_SECRET=""
 KC_CB_BASE="https://coreui-sf.pkasila.net"
-
