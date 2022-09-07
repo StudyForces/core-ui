@@ -5,7 +5,7 @@ import useDebounce from "~/utils/useDebounce";
 import aegoliusConfig from "~/aegolius-config.json";
 
 export default function AegoliusFormulaInput({formula, setFormula}: {formula: string, setFormula: (f: string) => void}) {
-    const [currentFormula, setCurrentFormula] = useState(formula);
+    const [currentFormula, setCurrentFormula] = useState(formula ?? '');
     const [loading, setLoading] = useState(false);
     const [result, setResult] = useState({output: formula});
     const debouncedFormula = useDebounce(currentFormula, 500);
