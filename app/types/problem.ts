@@ -1,6 +1,7 @@
 import type ProblemType from "~/types/problem-type";
 import type Tag from "~/types/Tag";
 import type ProblemSolve from "./solve/problem-solve";
+import ProblemAttachment from "~/types/ProblemAttachment";
 
 export default interface Problem {
     id: number;
@@ -8,7 +9,7 @@ export default interface Problem {
     problem: string;
     solution?: string;
     published: boolean;
-    attachments: any[];
+    attachments: ProblemAttachment[];
     sourcesId: number;
     createdBy?: string;
     createdDate: number;

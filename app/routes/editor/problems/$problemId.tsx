@@ -9,10 +9,8 @@ import {
     Checkbox,
     Container,
     Heading,
-    Image,
     Radio,
     RadioGroup,
-    SimpleGrid,
     Skeleton,
     Stack,
     Tag as ChakraTag,
@@ -26,7 +24,7 @@ import {useLoaderData, useSubmit, useTransition} from "@remix-run/react";
 import {ClientOnly} from "remix-utils";
 import type Problem from "~/types/problem";
 import type Tag from "~/types/problem";
-import {useState} from "react";
+import {useCallback, useState} from "react";
 import SectionCard from "~/components/problems/section-card";
 import ProblemType from "~/types/problem-type";
 import TagsSelector from "~/components/editor/tags-selector.client";
@@ -34,6 +32,8 @@ import EditProblemSolve from "~/components/editor/edit-problem-solve";
 import type ProblemSolve from "~/types/solve/problem-solve";
 import ProblemSolveType from "~/types/solve/problem-solve-type";
 import EquationInserter from "~/components/equation-inserter";
+import AttachmentsEdit from "~/components/editor/attachments-edit";
+import ProblemAttachment from "~/types/ProblemAttachment";
 
 export const action: ActionFunction = async ({request, params}) => {
     const data = await request.formData();
@@ -71,7 +71,10 @@ export const action: ActionFunction = async ({request, params}) => {
                         solution: solution === '' ? null : solution,
                         type: data.get('type'),
                         tagIds: (data.get('tags') as string).split(',').map(id => parseInt(id, 10)),
-                        solverMetadata: solverMetadata
+                        solverMetadata: solverMetadata,
+                        attachments: {
+                            files: JSON.parse(data.get('attachments') as string)
+                        }
                     };
                     query = `mutation ProblemUpdate($id: ID!, $input: ProblemInput) {
     updateProblem(id: $id, input: $input) {
@@ -209,6 +212,7 @@ export default function EditorProblem() {
     const {results, url} = useLoaderData() as { results: { problem: Problem, tags: Tag[] }, url: string };
     const [type, setType] = useState(results.problem.type);
     const [tags, setTags] = useState(results.problem.tags ?? []);
+    const [attachments, setAttachments] = useState<ProblemAttachment[] | null>(null);
     const [problem, setProblem] = useState(results.problem.problem);
     const [solution, setSolution] = useState(results.problem.solution ?? '');
     const [hasSolution, setHasSolution] = useState(results.problem.solution !== null && results.problem.solution !== '');
@@ -235,6 +239,11 @@ export default function EditorProblem() {
         }
     }
 
+    const handleAttachmentsChange = (attachments: ProblemAttachment[]) => {
+        console.log(attachments);
+        setAttachments(attachments);
+    }
+
     const submit = useSubmit();
     const transition = useTransition();
 
@@ -254,7 +263,8 @@ export default function EditorProblem() {
             solution: hasSolution ? solution : '',
             solverMetadata: JSON.stringify((hasSolverMetadata && solverMetadata?.type) ? solverMetadata : null),
             type,
-            tags: tags.map(t => `${t.id}`).join(',')
+            tags: tags.map(t => `${t.id}`).join(','),
+            attachments: JSON.stringify((attachments ?? results.problem.attachments).map(a => a.fileName)),
         }, {method: "post", action: `/editor/problems/${results.problem.id}`});
     }
 
@@ -285,7 +295,8 @@ export default function EditorProblem() {
         solution !== (results.problem.solution ?? '') ||
         hasSolution !== (results.problem.solution !== null && results.problem.solution !== '') ||
         JSON.stringify(solverMetadata) !== JSON.stringify(results.problem.solverMetadata) ||
-        hasSolverMetadata !== (results.problem.solverMetadata?.type !== null);
+        hasSolverMetadata !== (results.problem.solverMetadata?.type !== null) ||
+        (attachments ?? results.problem.attachments).map(a => a.fileName) !== results.problem.attachments.map(a => a.fileName);
 
     return <>
         <Container maxW={'5xl'} as={'article'}>
@@ -362,24 +373,9 @@ export default function EditorProblem() {
                     </SectionCard> : null
                 }
 
-                {
-                    results.problem.attachments.length > 0 ? <SectionCard title={'Attachments'}>
-                        <SimpleGrid
-                            columns={{
-                                base: 1,
-                                md: 2
-                            }}
-                            spacing={4}>
-                            {
-                                results.problem.attachments.map(attachment => <Box key={attachment.fileName}>
-                                    <Image w="full"
-                                           rounded="lg"
-                                           src={attachment.url}></Image>
-                                </Box>)
-                            }
-                        </SimpleGrid>
-                    </SectionCard> : null
-                }
+                <SectionCard title={'Attachments'}>
+                    <AttachmentsEdit attachments={attachments ?? results.problem.attachments} onChange={handleAttachmentsChange}></AttachmentsEdit>
+                </SectionCard>
 
                 <SectionCard title={'Tags'}>
                     <Wrap spacing={1}>
